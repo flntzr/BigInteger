@@ -14,26 +14,26 @@ public class TestFileReader {
 		this.filePath = filePath;
 	}
 
-	public List<TestCase> read() {
-		List<TestCase> result = new ArrayList<TestCase>();
+	public List<ImportedTest> read() {
+		List<ImportedTest> result = new ArrayList<ImportedTest>();
 		BufferedReader reader;
 		try {
 			reader = new BufferedReader(new FileReader(this.filePath));
 			String line = reader.readLine();
-			TestCase testCase = new TestCase();
+			ImportedTest testCase = new ImportedTest();
 			while (line != null) {
 				if (line.startsWith("#---------")) {
 					result.add(testCase);
-					testCase = new TestCase();
+					testCase = new ImportedTest();
 				} else if (line.startsWith("#")) {
 				} else {
 					String[] splitLine = line.split("=");
 					if (splitLine.length != 2 || splitLine[1].isEmpty()) {
 						continue;
 					}
-					if (splitLine[0] == "t") {
+					if (splitLine[0].equals("t")) {
 						testCase.title = splitLine[1];
-					} else if (splitLine[0] == "s") {
+					} else if (splitLine[0].equals("s")) {
 						testCase.size = Integer.parseInt(splitLine[1]);
 					} else {
 						testCase.map.put(splitLine[0], splitLine[1]);						
