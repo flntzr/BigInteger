@@ -14,17 +14,17 @@ public class TestFileReader {
 		this.filePath = filePath;
 	}
 
-	public List<ImportedTest> read() {
-		List<ImportedTest> result = new ArrayList<ImportedTest>();
+	public List<ImportedTestCase> read() {
+		List<ImportedTestCase> result = new ArrayList<ImportedTestCase>();
 		BufferedReader reader;
 		try {
 			reader = new BufferedReader(new FileReader(this.filePath));
 			String line = reader.readLine();
-			ImportedTest testCase = new ImportedTest();
+			ImportedTestCase testCase = new ImportedTestCase();
 			while (line != null) {
 				if (line.startsWith("#---------")) {
 					result.add(testCase);
-					testCase = new ImportedTest();
+					testCase = new ImportedTestCase();
 				} else if (line.startsWith("#")) {
 				} else {
 					String[] splitLine = line.split("=");
