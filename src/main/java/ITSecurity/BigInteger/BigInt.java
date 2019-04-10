@@ -44,12 +44,13 @@ public class BigInt extends BigNumber {
 		StringBuilder builder = new StringBuilder();
 		int j = 0;
 		for (int i = 0; i < this.spart; i++) {
-			String hexDigit = Integer.toString(this.cells[j++].value, 16);
-			builder.insert(0, hexDigit);
+			String hexDigit = Integer.toUnsignedString(this.cells[j++].value, 16);
+			// each hex number needs to be padded to 4 digits
+			builder.insert(0, BigNumberUtils.padWithZeros(hexDigit, 4));
 		}
-		for (int k = 0; k < length - this.spart; k++) {
-			builder.insert(0, '0');
-		}
+		// pad to match the string length
+		String pad = BigNumberUtils.padWithZeros("", length - builder.length());
+		builder.insert(0, pad);
 		builder.insert(0, this.positive ? '+' : '-');
 		return builder.toString();
 	}

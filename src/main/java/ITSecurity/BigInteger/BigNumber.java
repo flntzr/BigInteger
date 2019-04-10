@@ -76,9 +76,9 @@ public abstract class BigNumber {
 		Cell over = new Cell(0);
 //		this.expand(this.spart + 1);
 		for (int i = 0; i < this.spart - 1; i++) {
-			Cell2 tmp = new Cell2(this.cells[i].value << count + over.value);
-			this.cells[i] = new Cell2(tmp.value % Cell.CELL_BASE);
-			over.value = tmp.value / Cell.CELL_BASE;
+			Cell2 tmp = new Cell2((this.cells[i].value << count) + over.value);
+			this.cells[i] = new Cell2(tmp.getLower());
+			over.value = tmp.getUpper();
 		}
 		this.cells[this.spart] = new Cell2(over);
 		if (over.value != 0) {

@@ -13,6 +13,6 @@ public class Cell {
 	
 	@Override
 	public String toString() {
-		return "" + value;
+		return "" + Integer.toUnsignedString(this.value, 16);
 	}
 }
