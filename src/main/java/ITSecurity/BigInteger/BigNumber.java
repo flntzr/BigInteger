@@ -83,12 +83,46 @@ public abstract class BigNumber {
 			this.cells[this.spart] = new Cell2(over);
 		}
 		if (over.value != 0) {
-			// if there are no more cells to overflow just ignore the 'over' and set the
-			// most significant cell to the max value
+			// if there are no more cells to overflow just ignore the 'over'
 			if (this.spart != this.size) {
 				this.spart++;
 			}
 		}
+	}
+
+	public void shiftRight(int count) {
+		if (count >= Cell.CELL_BASE) {
+			throw new RuntimeException("Must shift right by less than " + Cell.CELL_BASE);
+		}
+		Cell underflow = new Cell(0);
+		int tmpShift = Cell.CELL_BASE * 2 - count;
+		for (int i = this.spart - 1; i >= 0; i--) {
+			this.cells[i].setUpper(underflow);
+			// get lower 'count' bits of this.cells[i] as the underflow
+			underflow.value = this.cells[i].value << tmpShift >>> tmpShift;
+			this.cells[i].value >>>= count;
+			
+//			Cell2 tmp = new Cell2(this.cells[i].value);
+//			// 1) make underflow the upper of tmp
+//			tmp.setUpper(underFlow);
+//			// 2) Set tmp's last 'count' bits as the underflow
+//			underFlow.value = tmp.value << (Cell.CELL_BASE - count) >>> (Cell.CELL_BASE - count);
+//			// 3) shift underflow by 'count'
+//			this.cells[i].value = this.cells[i].value >>> count;
+
+//			Cell2 tmp = new Cell2((this.cells[i].value >>> count) + underFlow.value);
+//			this.cells[i] = new Cell2(tmp.getLower());
+//			underFlow.value = tmp.getUpper();
+		}
+//		if (this.spart < this.size) {
+//			this.cells[this.spart] = new Cell2(underFlow);
+//		}
+//		if (underFlow.value != 0) {
+//			// if there are no more cells to overflow just ignore the 'under'
+//			if (this.spart != this.size) {
+//				this.spart++;
+//			}
+//		}
 	}
 
 	@Override

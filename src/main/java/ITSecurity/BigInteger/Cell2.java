@@ -22,6 +22,16 @@ public class Cell2 {
 	public int getUpper() {
 		return this.value >>> Cell.CELL_BASE;
 	}
+	
+	public void setLower(Cell c) {
+		int newLower = c.value & Cell.CELL_BASE_MASK;
+		this.value = (this.getUpper() << Cell.CELL_BASE) + newLower;
+	}
+	
+	public void setUpper(Cell c) {
+		int newUpper = c.value & Cell.CELL_BASE_MASK;
+		this.value = (newUpper << Cell.CELL_BASE) + this.getLower();
+	}
 
 	@Override
 	public String toString() {
