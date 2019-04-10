@@ -44,9 +44,9 @@ public class ShiftLeftTests {
 
 	@Test
 	public void shouldHaveCorrectTotal() {
-		BigInt a = new BigInt(true, 0);
+		BigInt a = new BigInt(true, 0, this.size / Cell.CELL_BASE);
 		a.fromHexString(this.values[0]);
-		BigInt b = new BigInt(a);
+		BigInt b = new BigInt(a, this.size / Cell.CELL_BASE);
 		b.shiftLeft(1);
 		String bHex = b.toHexString(this.size / 4);
 		assertEquals(this.values[1], bHex);

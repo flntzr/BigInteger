@@ -3,12 +3,12 @@ package ITSecurity.BigInteger;
 public class BigInt extends BigNumber {
 	private static final int DEFAULT_BIG_INT_SIZE = 2048 / Cell.CELL_BASE;
 
-	public BigInt(BigInt bigInt) {
-		super(DEFAULT_BIG_INT_SIZE, bigInt);
+	public BigInt(BigInt bigInt, int size) {
+		super(size, bigInt);
 	}
 
-	public BigInt(boolean positive, int value) {
-		super(DEFAULT_BIG_INT_SIZE, positive, value);
+	public BigInt(boolean positive, int value, int size) {
+		super(size, positive, value);
 	}
 
 	public void fromHexString(String str) {
