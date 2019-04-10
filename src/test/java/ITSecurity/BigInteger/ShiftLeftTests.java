@@ -43,12 +43,22 @@ public class ShiftLeftTests {
 	}
 
 	@Test
-	public void shouldHaveCorrectTotal() {
+	public void testBitShifts() {
 		BigInt a = new BigInt(true, 0, this.size / Cell.CELL_BASE);
 		a.fromHexString(this.values[0]);
-		BigInt b = new BigInt(a, this.size / Cell.CELL_BASE);
-		b.shiftLeft(1);
-		String bHex = b.toHexString(this.size / 4);
-		assertEquals(this.values[1], bHex);
+		String[] shiftedHexResults = new String[7];
+		for (int i = 0; i < 7; i++) {
+			BigInt shifted = new BigInt(a, this.size / Cell.CELL_BASE);
+			shifted.shiftLeft(i + 1);
+			String hexResult = shifted.toHexString(this.size / 4);
+			shiftedHexResults[i] = hexResult;
+		}
+		assertEquals(this.values[1], shiftedHexResults[0]);
+		assertEquals(this.values[2], shiftedHexResults[1]);
+		assertEquals(this.values[3], shiftedHexResults[2]);
+		assertEquals(this.values[4], shiftedHexResults[3]);
+		assertEquals(this.values[5], shiftedHexResults[4]);
+		assertEquals(this.values[6], shiftedHexResults[5]);
+		assertEquals(this.values[7], shiftedHexResults[6]);
 	}
 }

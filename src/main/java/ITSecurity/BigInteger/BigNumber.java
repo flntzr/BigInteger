@@ -74,21 +74,18 @@ public abstract class BigNumber {
 			throw new RuntimeException("Must shift left by less than " + Cell.CELL_BASE);
 		}
 		Cell over = new Cell(0);
-//		this.expand(this.spart + 1);
 		for (int i = 0; i < this.spart; i++) {
 			Cell2 tmp = new Cell2((this.cells[i].value << count) + over.value);
 			this.cells[i] = new Cell2(tmp.getLower());
 			over.value = tmp.getUpper();
 		}
 		if (this.spart < this.size) {
-			this.cells[this.spart] = new Cell2(over);			
+			this.cells[this.spart] = new Cell2(over);
 		}
 		if (over.value != 0) {
 			// if there are no more cells to overflow just ignore the 'over' and set the
 			// most significant cell to the max value
-			if (this.spart == this.size) {
-//				this.cells[this.size - 1] = new Cell2((int) Math.pow(2, Cell.CELL_BASE) - 1);
-			} else {
+			if (this.spart != this.size) {
 				this.spart++;
 			}
 		}
