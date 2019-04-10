@@ -1,6 +1,7 @@
 package ITSecurity.BigInteger;
 
 public final class BigNumberUtils {
+	
 	// expands the big numbers so they match
 	public static void sameSize(BigNumber a, BigNumber b) {
 		if (a.spart > b.spart) {
@@ -9,4 +10,5 @@ public final class BigNumberUtils {
 			a.resize(b.spart);
 		}
 	}
+	
 }

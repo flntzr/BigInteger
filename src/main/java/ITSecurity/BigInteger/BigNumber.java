@@ -6,6 +6,16 @@ public abstract class BigNumber {
 	protected boolean positive;
 	protected Cell2[] cells;
 
+	public BigNumber(int size, BigNumber bigNumber) {
+		this.size = size;
+		this.spart = bigNumber.spart;
+		this.positive = bigNumber.positive;
+		this.cells = new Cell2[bigNumber.cells.length];
+		for (int i = 0; i < bigNumber.cells.length; i++) {
+			this.cells[i] = new Cell2(bigNumber.cells[i].value);
+		}
+	}
+
 	public BigNumber(int size, boolean positive, int value) {
 		this.size = size;
 		this.positive = positive;
@@ -59,12 +69,27 @@ public abstract class BigNumber {
 		}
 	}
 
+	public void shiftLeft(int count) {
+		if (count >= Cell.CELL_BASE) {
+			throw new RuntimeException("Must shift left by less than " + Cell.CELL_BASE);
+		}
+		Cell over = new Cell(0);
+//		this.expand(this.spart + 1);
+		for (int i = 0; i < this.spart - 1; i++) {
+			Cell2 tmp = new Cell2(this.cells[i].value << count + over.value);
+			this.cells[i] = new Cell2(tmp.value % Cell.CELL_BASE);
+			over.value = tmp.value / Cell.CELL_BASE;
+		}
+		this.cells[this.spart] = new Cell2(over);
+		if (over.value != 0) {
+			this.spart++;
+		}
+	}
+
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
 		return super.toString();
 	}
-
-	public abstract void fromString(String str);
 
 }
