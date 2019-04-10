@@ -42,23 +42,45 @@ public class ShiftLeftTests {
 		this.values = new String[] { a, b, c, d, e, f, g, h };
 	}
 
-	@Test
-	public void testBitShifts() {
+	private void testShift(int count) {
 		BigInt a = new BigInt(true, 0, this.size / Cell.CELL_BASE);
 		a.fromHexString(this.values[0]);
-		String[] shiftedHexResults = new String[7];
-		for (int i = 0; i < 7; i++) {
-			BigInt shifted = new BigInt(a, this.size / Cell.CELL_BASE);
-			shifted.shiftLeft(i + 1);
-			String hexResult = shifted.toHexString(this.size / 4);
-			shiftedHexResults[i] = hexResult;
-		}
-		assertEquals(this.values[1], shiftedHexResults[0]);
-		assertEquals(this.values[2], shiftedHexResults[1]);
-		assertEquals(this.values[3], shiftedHexResults[2]);
-		assertEquals(this.values[4], shiftedHexResults[3]);
-		assertEquals(this.values[5], shiftedHexResults[4]);
-		assertEquals(this.values[6], shiftedHexResults[5]);
-		assertEquals(this.values[7], shiftedHexResults[6]);
+		a.shiftLeft(count);
+		assertEquals(this.values[count], a.toHexString(this.size / 4));
+	}
+
+	@Test
+	public void shiftBy1() {
+		this.testShift(1);
+	}
+
+	@Test
+	public void shiftBy2() {
+		this.testShift(2);
+	}
+
+	@Test
+	public void shiftBy3() {
+		this.testShift(3);
+	}
+
+	@Test
+	public void shiftBy4() {
+		this.testShift(4);
+	}
+
+	@Test
+	public void shiftBy5() {
+		this.testShift(5);
+	}
+
+	@Test
+	public void shiftBy6() {
+		this.testShift(6);
+	}
+
+	@Test
+	public void shiftBy7() {
+		this.testShift(7);
 	}
 }
