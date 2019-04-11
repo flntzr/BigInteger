@@ -66,4 +66,13 @@ public class ArithmeticTests {
 		BigInt result = BigIntUtils.add(a, b);
 		assertEquals(expected, result);
 	}
+	
+	@Test
+	public void subHex() {
+		BigInt a = this.hexToBigInt(this.hexOperands[0]);
+		BigInt b = this.hexToBigInt(this.hexOperands[1]);
+		BigInt expected = this.hexToBigInt(this.resultsHex[1]);
+		BigInt result = BigIntUtils.sub(a, b);
+		assertEquals(expected, result);
+	}
 }
