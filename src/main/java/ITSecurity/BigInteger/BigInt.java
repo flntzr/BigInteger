@@ -65,6 +65,43 @@ public class BigInt extends BigNumber {
 		this.reduce();
 	}
 
+//	public void mul(BigInt a, boolean positive) {
+//		BigNumberUtils.sameSize(this, a);
+//		this.positive = positive;
+//		this.spart = 2 * this.spart + 1;
+//		int tmpSpart = this.spart;
+//		for (int i = 0; i < a.spart; i++) {
+//			for (int j = 0; j < tmpSpart; j++) {
+//				Cell2 tmp = new Cell2(this.cells[j].value * a.cells[i].value);
+//				this.addCell2(i + j, tmp);
+//			}
+//		}
+//	}
+
+	public BigInt mul(BigInt a, boolean positive) {
+		BigNumberUtils.sameSize(this, a);
+		BigInt c = new BigInt(positive, 0, this.size);
+		c.spart = this.spart * 2 + 1;
+		for (int i = 0; i < a.spart; i++) {
+			for (int j = 0; j < this.spart; j++) {
+				Cell2 tmp = new Cell2(this.cells[j].value * a.cells[i].value);
+				c.addCell2(i + j, tmp);
+			}
+		}
+		return c;
+	}
+
+	public void addCell2(int index, Cell2 cell) {
+		this.spart++;
+		Cell2 tmp = new Cell2(cell);
+		Cell2 over = new Cell2(cell);
+		while (over.value != 0) {
+			tmp.value = this.cells[index].value + over.getLower();
+			this.cells[index++].value = tmp.getLower();
+			over.value = tmp.getUpper() + over.getUpper();
+		}
+	}
+
 	/**
 	 * Print the hex string. Pad it with leading zeroes to match the given length.
 	 * 
