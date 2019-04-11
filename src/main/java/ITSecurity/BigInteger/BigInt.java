@@ -54,9 +54,10 @@ public class BigInt extends BigNumber {
 		BigNumberUtils.sameSize(this, a);
 		this.spart++;
 		for (int i = 0; i < this.spart; i++) {
+			Integer aaa = 3;
 			tmp.value = this.cells[i].value - a.cells[i].value + over.value;
 			this.cells[i].value = tmp.getLower();
-			over.value = tmp.getUpper();
+			over.value = tmp.getUpper() != 0 ? -1 : 0;
 		}
 		this.cells[this.spart] = over;
 		this.positive = positive;
