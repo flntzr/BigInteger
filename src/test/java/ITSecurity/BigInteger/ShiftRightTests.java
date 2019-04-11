@@ -45,6 +45,7 @@ public class ShiftRightTests {
 	private void testShift(int count) {
 		BigInt a = new BigInt(true, 0, this.size / Cell.CELL_BASE);
 		a.fromHexString(this.values[0]);
+		a.reduce();
 		a.shiftRight(count);
 		assertEquals(this.values[count], a.toHexString(this.size / 4));
 	}

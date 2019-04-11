@@ -28,12 +28,13 @@ public abstract class BigNumber {
 
 	public void reduce() {
 		// reverse traverse each cell for the first one that is not 0
-		for (int i = size - 1; i < 0; i--) {
+		for (int i = size - 1; i >= 0; i--) {
 			if (this.cells[i].value != 0) {
 				this.spart = i + 1;
 				return;
 			}
 		}
+		this.spart = 0;
 	}
 
 	public void expand(int size) {
