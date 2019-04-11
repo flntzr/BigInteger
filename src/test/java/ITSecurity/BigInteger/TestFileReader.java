@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TestFileReader {
 	String filePath;
@@ -29,9 +30,8 @@ public class TestFileReader {
 				} else {
 					String[] splitLine = line.split("=");
 					if (splitLine.length != 2 || splitLine[1].isEmpty()) {
-						continue;
-					}
-					if (splitLine[0].equals("t")) {
+						testCase.map.put(splitLine[0], "");
+					} else if (splitLine[0].equals("t")) {
 						testCase.title = splitLine[1];
 					} else {
 						testCase.map.put(splitLine[0], splitLine[1]);
@@ -45,6 +45,7 @@ public class TestFileReader {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return result;
+		// Filter out any test-cases that have no title.
+		return result.stream().filter(r -> r.title != null).collect(Collectors.toList());
 	}
 }

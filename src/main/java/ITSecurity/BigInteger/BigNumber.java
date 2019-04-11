@@ -111,4 +111,29 @@ public abstract class BigNumber {
 		return super.toString();
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (!(obj instanceof BigNumber)) {
+			return false;
+		}
+		BigNumber othNumber = (BigNumber) obj;
+		if (this.positive != othNumber.positive || this.size != othNumber.size || this.spart != othNumber.spart
+				|| this.cells.length != othNumber.cells.length) {
+			return false;
+		}
+
+		for (int i = 0; i < this.cells.length; i++) {
+			if (this.cells[i] != othNumber.cells[i]) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 }

@@ -10,4 +10,10 @@ public class ImportedTestCase {
 	public ImportedTestCase() {
 		this.map = new HashMap<String, String>();
 	}
+
+	@Override
+	public String toString() {
+		return this.title;
+	}
+	
 }
