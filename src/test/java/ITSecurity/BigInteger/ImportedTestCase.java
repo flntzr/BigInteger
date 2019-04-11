@@ -5,7 +5,6 @@ import java.util.Map;
 
 public class ImportedTestCase {
 	public String title;
-	public int size;
 	public Map<String, String> map;
 	
 	public ImportedTestCase() {

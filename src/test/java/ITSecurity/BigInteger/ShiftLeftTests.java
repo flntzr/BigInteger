@@ -28,7 +28,7 @@ public class ShiftLeftTests {
 	public static Collection<Object[]> convertTestMap(List<ImportedTestCase> tests) {
 		List<Object[]> objects = new ArrayList<Object[]>();
 		for (ImportedTestCase test : tests) {
-			Object[] arr = { test.title, test.size, test.map.get("a"), test.map.get("b"), test.map.get("c"),
+			Object[] arr = { test.title, Integer.parseInt(test.map.get("s")), test.map.get("a"), test.map.get("b"), test.map.get("c"),
 					test.map.get("d"), test.map.get("e"), test.map.get("f"), test.map.get("g"), test.map.get("h"), };
 			objects.add(arr);
 		}

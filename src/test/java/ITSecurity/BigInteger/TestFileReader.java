@@ -33,10 +33,8 @@ public class TestFileReader {
 					}
 					if (splitLine[0].equals("t")) {
 						testCase.title = splitLine[1];
-					} else if (splitLine[0].equals("s")) {
-						testCase.size = Integer.parseInt(splitLine[1]);
 					} else {
-						testCase.map.put(splitLine[0], splitLine[1]);						
+						testCase.map.put(splitLine[0], splitLine[1]);
 					}
 				}
 				line = reader.readLine();
@@ -44,8 +42,7 @@ public class TestFileReader {
 			reader.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return result;
