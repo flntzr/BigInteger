@@ -78,6 +78,7 @@ public class BigInt extends BigNumber {
 //		}
 //	}
 
+	// TODO: Modify reference and don't return a new BigInt.
 	public BigInt mul(BigInt a, boolean positive) {
 		BigNumberUtils.sameSize(this, a);
 		BigInt c = new BigInt(positive, 0, this.size);
