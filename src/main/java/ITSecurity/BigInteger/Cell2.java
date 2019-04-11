@@ -36,6 +36,6 @@ public class Cell2 {
 	@Override
 	public String toString() {
 		return "" + Integer.toUnsignedString(this.value, 16);
-	}
+	}	
 
 }

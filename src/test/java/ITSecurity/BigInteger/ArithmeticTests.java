@@ -19,8 +19,8 @@ public class ArithmeticTests {
 	private int size;
 	private final String[] hexOperands;
 	private final String[] decOperands;
-	private final String[] operationsHex;
-	private final String[] operationsDec;
+	private final String[] resultsHex;
+	private final String[] resultsDec;
 
 	@Parameterized.Parameters(name = "{0}")
 	public static Collection<Object[]> data() {
@@ -47,8 +47,8 @@ public class ArithmeticTests {
 		this.size = size;
 		this.hexOperands = new String[] { a, b };
 		this.decOperands = new String[] { A, B };
-		this.operationsHex = new String[] { plus, minus, times, slash, percent };
-		this.operationsDec = new String[] { C, D, E, F, G };
+		this.resultsHex = new String[] { plus, minus, times, slash, percent };
+		this.resultsDec = new String[] { C, D, E, F, G };
 	}
 
 	private BigInt hexToBigInt(String hexString) {
@@ -62,5 +62,8 @@ public class ArithmeticTests {
 	public void addHex() {
 		BigInt a = this.hexToBigInt(this.hexOperands[0]);
 		BigInt b = this.hexToBigInt(this.hexOperands[1]);
+		BigInt expected = this.hexToBigInt(this.resultsHex[0]);
+		a.add(b);
+		assertEquals(expected, a);
 	}
 }

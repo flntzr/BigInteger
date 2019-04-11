@@ -1,5 +1,7 @@
 package ITSecurity.BigInteger;
 
+import java.util.stream.Collectors;
+
 public abstract class BigNumber {
 	protected int size;
 	protected int spart;
@@ -107,8 +109,13 @@ public abstract class BigNumber {
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return super.toString();
+		StringBuilder builder = new StringBuilder();
+		int cellCount = Math.max(this.spart, 1);
+		for (int i = cellCount; i >= 0; i--) {
+			builder.append(BigNumberUtils.padWithZeros(this.cells[i].toString(), 4));
+		}
+		builder.insert(0, this.positive ? '+' : '-');
+		return builder.toString();
 	}
 
 	@Override
@@ -129,7 +136,7 @@ public abstract class BigNumber {
 		}
 
 		for (int i = 0; i < this.cells.length; i++) {
-			if (this.cells[i] != othNumber.cells[i]) {
+			if (this.cells[i].value != othNumber.cells[i].value) {
 				return false;
 			}
 		}

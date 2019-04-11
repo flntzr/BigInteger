@@ -33,6 +33,10 @@ public class BigInt extends BigNumber {
 			this.cells[j++] = new Cell2(Integer.parseUnsignedInt(subStr, 16));
 		}
 	}
+	
+	public void add(BigInt a) {
+		
+	}
 
 	/**
 	 * Print the hex string. Pad it with leading zeroes to match the given length.
