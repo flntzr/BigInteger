@@ -42,12 +42,12 @@ public class ArithmeticTests {
 	}
 
 	public ArithmeticTests(String title, int size, String a, String A, String b, String B, String plus, String C,
-			String minus, String D, String times, String E, String slash, String F, String percent, String G) {
+			String minus, String D, String times, String E, String divide, String F, String percent, String G) {
 		this.title = title;
 		this.size = size;
 		this.hexOperands = new String[] { a, b };
 		this.decOperands = new String[] { A, B };
-		this.resultsHex = new String[] { plus, minus, times, slash, percent };
+		this.resultsHex = new String[] { plus, minus, times, divide, percent };
 		this.resultsDec = new String[] { C, D, E, F, G };
 	}
 
