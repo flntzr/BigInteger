@@ -2,7 +2,7 @@ package ITSecurity.BigInteger;
 
 import java.util.stream.Collectors;
 
-public abstract class BigNumber {
+public abstract class BigNumber implements Comparable<BigNumber> {
 	protected int size;
 	protected int spart;
 	protected boolean positive;
@@ -40,8 +40,13 @@ public abstract class BigNumber {
 	}
 
 	public void expand(int size) {
-		if (this.size > size) {
-			throw new RuntimeException("Must expand to a size greater than the previous size.");
+		if (size <= this.spart) {
+			throw new RuntimeException("Must expand to a size greater than the significant part.");
+		}
+		if (size <= this.size) {
+			// we don't need to physically expand the cell-array
+			this.spart = size;
+			return;
 		}
 		Cell2[] newCells = new Cell2[size];
 		System.arraycopy(this.cells, 0, newCells, 0, this.cells.length);
@@ -129,18 +134,51 @@ public abstract class BigNumber {
 		if (!(obj instanceof BigNumber)) {
 			return false;
 		}
-		BigNumber othNumber = (BigNumber) obj;
-		if (this.positive != othNumber.positive || this.size != othNumber.size || this.spart != othNumber.spart
-				|| this.cells.length != othNumber.cells.length) {
+		BigNumber o = (BigNumber) obj;
+		if (this.positive != o.positive || this.size != o.size || this.cells.length != o.cells.length) {
 			return false;
 		}
 
 		for (int i = 0; i < this.cells.length; i++) {
-			if (this.cells[i].value != othNumber.cells[i].value) {
+			if (this.cells[i].value != o.cells[i].value) {
 				return false;
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Compares this object with the specified object. Ignores the explicit
+	 * 'positive' or 'negative' sign.
+	 * 
+	 * @param o
+	 * @return
+	 */
+	public int compareToIgnoringSign(BigNumber o) {
+		for (int i = this.cells.length - 1; i >= 0; i--) {
+			if (this.cells[i].value != o.cells[i].value) {
+				return Integer.compare(this.cells[i].value, o.cells[i].value);
+			}
+		}
+		return 0;
+	}
+
+	@Override
+	public int compareTo(BigNumber o) {
+		int result = this.compareToIgnoringSign(o);
+		if (result == 0) {
+			// +0 and -0 are equal
+			return 0;
+		}
+		if (this.positive && o.positive) {
+			return result;
+		} else if (this.positive && !o.positive) {
+			return 1;
+		} else if (!this.positive && o.positive) {
+			return -1;
+		} else {
+			return -result;
+		}
 	}
 
 }

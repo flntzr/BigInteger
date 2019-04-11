@@ -33,9 +33,34 @@ public class BigInt extends BigNumber {
 			this.cells[j++] = new Cell2(Integer.parseUnsignedInt(subStr, 16));
 		}
 	}
-	
-	public void add(BigInt a) {
-		
+
+	public void add(BigInt a, boolean positive) {
+		Cell2 tmp = new Cell2(0);
+		Cell2 over = new Cell2(0);
+		BigNumberUtils.sameSize(this, a);
+		this.spart++;
+		for (int i = 0; i < this.spart; i++) {
+			tmp.value = this.cells[i].value + a.cells[i].value + over.value;
+			this.cells[i].value = tmp.getLower();
+			over.value = tmp.getUpper();
+		}
+		this.cells[this.spart] = over;
+		this.positive = positive;
+	}
+
+	public void sub(BigInt a, boolean positive) {
+		Cell2 tmp = new Cell2(0);
+		Cell2 over = new Cell2(0);
+		BigNumberUtils.sameSize(this, a);
+		this.spart++;
+		for (int i = 0; i < this.spart; i++) {
+			tmp.value = this.cells[i].value - a.cells[i].value + over.value;
+			this.cells[i].value = tmp.getLower();
+			over.value = tmp.getUpper();
+		}
+		this.cells[this.spart] = over;
+		this.positive = positive;
+		this.reduce();
 	}
 
 	/**
@@ -57,6 +82,11 @@ public class BigInt extends BigNumber {
 		builder.insert(0, pad);
 		builder.insert(0, this.positive ? '+' : '-');
 		return builder.toString();
+	}
+
+	@Override
+	protected BigInt clone() {
+		return new BigInt(this, this.size);
 	}
 
 }

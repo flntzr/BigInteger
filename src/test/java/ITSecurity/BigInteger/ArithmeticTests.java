@@ -63,7 +63,7 @@ public class ArithmeticTests {
 		BigInt a = this.hexToBigInt(this.hexOperands[0]);
 		BigInt b = this.hexToBigInt(this.hexOperands[1]);
 		BigInt expected = this.hexToBigInt(this.resultsHex[0]);
-		a.add(b);
-		assertEquals(expected, a);
+		BigInt result = BigIntUtils.add(a, b);
+		assertEquals(expected, result);
 	}
 }

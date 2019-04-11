@@ -9,6 +9,10 @@ public class Cell2 {
 	public Cell2(Cell c) {
 		this.value = c.value;
 	}
+	
+	public Cell2(Cell2 c) {
+		this.value = c.value;
+	}
 
 	public Cell2(int value) {
 		this.value = value;
