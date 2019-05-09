@@ -151,5 +151,6 @@ public abstract class BigNumber implements Comparable<BigNumber> {
 		for (int i = 0; i < this.cells.length; i++) {
 			this.cells[i] = new Cell2();
 		}
+		this.spart = 0;
 	}
 }

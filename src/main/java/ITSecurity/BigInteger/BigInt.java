@@ -105,19 +105,6 @@ public class BigInt extends BigNumber {
 		this.reduce();
 	}
 
-//	public void mul(BigInt a, boolean positive) {
-//		BigNumberUtils.sameSize(this, a);
-//		this.positive = positive;
-//		this.spart = 2 * this.spart + 1;
-//		int tmpSpart = this.spart;
-//		for (int i = 0; i < a.spart; i++) {
-//			for (int j = 0; j < tmpSpart; j++) {
-//				Cell2 tmp = new Cell2(this.cells[j].value * a.cells[i].value);
-//				this.addCell2(i + j, tmp);
-//			}
-//		}
-//	}
-
 	public void mul(BigInt a, boolean positive) {
 		BigNumberUtils.sameSize(this, a);
 		BigInt c = new BigInt(this, this.size);
@@ -131,6 +118,50 @@ public class BigInt extends BigNumber {
 				this.addCell2(i + j, tmp);
 			}
 		}
+	}
+
+	public void div(BigInt a, boolean positive) {
+		this.reduce();
+		a.reduce();
+		this.positive = positive;
+		BigInt q = new BigInt(this, this.size);
+		BigInt r = this.clone();
+		r.positive = true;
+		if (a.spart == 0) {
+			throw new RuntimeException("Cannot divide by 0");
+		}
+		if (this.spart < a.spart) {
+			// dividend < divisor
+			this.clearCells();
+			return;
+		}
+		if (this.spart == a.spart && this.compareTo(a) < 0) {
+			// dividend < divisor
+			this.clearCells();
+			return;
+		}
+		if (this.spart < 3 && this.spart < 3) {
+			// dividend and divisor are small enough for CPU to handle division
+			Cell2 dividend = new Cell2();
+			dividend.setLower(new Cell(this.cells[0].getLower()));
+			dividend.setUpper(new Cell(this.cells[1].getLower()));
+			Cell2 divisor = new Cell2();
+			divisor.setLower(new Cell(a.cells[0].getLower()));
+			divisor.setUpper(new Cell(a.cells[1].getLower()));
+			this.cells[0].value = dividend.value / divisor.value;
+			return;
+		}
+		// do full division
+		
+		
+		this.reduce();
+		r.reduce();
+	}
+
+	public void div10() {
+		// TODO: respect sign of BigInt
+		BigInt ten = new BigInt(true, 10, DEFAULT_BIG_INT_SIZE);
+		this.div(ten, true);
 	}
 
 	public void mul10() {
