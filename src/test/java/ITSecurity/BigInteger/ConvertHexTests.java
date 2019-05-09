@@ -13,10 +13,8 @@ import org.junit.runners.Parameterized;
 @RunWith(Parameterized.class)
 public class ConvertHexTests {
 	private static String testFilePath = "src/test/java/ITSecurity/BigInteger/test_files/Convert-Hex-Tests.txt";
-	private static int maxSize = 1360 / Cell.CELL_BASE;
 
 	private String title;
-	private int size;
 	private String decStr;
 	private String hexStr;
 	private String octStr;
@@ -42,7 +40,6 @@ public class ConvertHexTests {
 		this.decStr = d;
 		this.hexStr = h;
 		this.octStr = o;
-		this.size = maxSize;
 	}
 
 	@Test
