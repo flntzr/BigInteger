@@ -121,9 +121,9 @@ public class BigInt extends BigNumber {
 	public void mul(BigInt a, boolean positive) {
 		BigNumberUtils.sameSize(this, a);
 		BigInt c = new BigInt(this, this.size);
-		c.spart = this.spart * 2 + 1;
+		c.spart = this.spart;
 		this.clearCells();
-		this.spart = c.spart;
+		this.spart = c.spart * 2 + 1;
 		this.positive = positive;
 		for (int i = 0; i < a.spart; i++) {
 			for (int j = 0; j < c.spart; j++) {
