@@ -14,7 +14,7 @@ import org.junit.runners.Parameterized;
 @RunWith(Parameterized.class)
 public class ArithmeticTests {
 	private static String testFilePath = "src/test/java/ITSecurity/BigInteger/test_files/Arithmetic-Tests.txt";
-
+	
 	private String title;
 	private int size;
 	private final String[] hexOperands;
@@ -52,8 +52,15 @@ public class ArithmeticTests {
 	}
 
 	private BigInt hexToBigInt(String hexString) {
-		BigInt a = new BigInt(true, 0, this.size / Cell.CELL_BASE);
+		BigInt a = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
 		a.fromHexString(hexString);
+		a.reduce();
+		return a;
+	}
+	
+	private BigInt decToBigInt(String decString) {
+		BigInt a = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
+		a.fromDecString(decString);
 		a.reduce();
 		return a;
 	}
@@ -84,4 +91,32 @@ public class ArithmeticTests {
 		BigInt result = a.mul(b, a.positive == b.positive);
 		assertEquals(expected, result);
 	}
+	
+	@Test
+	public void addDec() {
+		BigInt a = this.decToBigInt(this.decOperands[0]);
+		BigInt b = this.decToBigInt(this.decOperands[1]);
+		BigInt expected = this.decToBigInt(this.resultsDec[0]);
+		BigInt result = BigIntUtils.add(a, b);
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void subDec() {
+		BigInt a = this.decToBigInt(this.decOperands[0]);
+		BigInt b = this.decToBigInt(this.decOperands[1]);
+		BigInt expected = this.decToBigInt(this.resultsDec[1]);
+		BigInt result = BigIntUtils.sub(a, b);
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void mulDec() {
+		BigInt a = this.decToBigInt(this.decOperands[0]);
+		BigInt b = this.decToBigInt(this.decOperands[1]);
+		BigInt expected = this.decToBigInt(this.resultsDec[2]);
+		BigInt result = a.mul(b, a.positive == b.positive);
+		assertEquals(expected, result);
+	}
+	// TODO: Implement div and mod tests (/, F, %, G)
 }
