@@ -41,24 +41,19 @@ public class BigInt extends BigNumber {
 
 	public void fromOctString(String str) {
 		// TODO: empty all cells beforehand
-
-//		str = this.extractPositive(str);
-//
-//		int subStrSize = Cell.CELL_BASE / 6;
-//		int strLength = str.length();
-//		this.spart = (int) Math.ceil(strLength / subStrSize);
-//		int j = 0;
-//		for (int i = 0; i < strLength; i += subStrSize) {
-//			int startIdx = Math.max(0, strLength - i - subStrSize);
-//			int endIdx = strLength - i;
-//			String subStr = str.substring(startIdx, endIdx);
-//			this.cells[j++] = new Cell2(Integer.parseUnsignedInt(subStr, 8) >>> 2);
-//		}
+		str = this.extractPositive(str);
+		int len = str.length();
+		for (int i = 0; i < len; i++) {
+			int num = Integer.parseUnsignedInt("" + str.charAt(i), 8);
+			BigInt a = new BigInt(this.positive, num, this.size);
+			this.shiftLeft(3);
+			this.add(a, positive);
+			this.reduce();
+		}
 	}
 
 	public void fromDecString(String str) {
 		// TODO: empty all cells beforehand
-		
 		str = this.extractPositive(str);
 		int len = str.length();
 		for (int i = 0; i < len; i++) {
@@ -68,7 +63,6 @@ public class BigInt extends BigNumber {
 			this.add(a, positive);
 			this.reduce();
 		}
-		this.reduce();
 	}
 
 	public void add(BigInt a, boolean positive) {

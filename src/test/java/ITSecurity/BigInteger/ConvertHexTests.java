@@ -17,9 +17,9 @@ public class ConvertHexTests {
 
 	private String title;
 	private int size;
-	private String dec;
-	private String hex;
-	private String oct;
+	private String decStr;
+	private String hexStr;
+	private String octStr;
 
 	@Parameterized.Parameters(name = "{0}")
 	public static Collection<Object[]> data() {
@@ -39,9 +39,9 @@ public class ConvertHexTests {
 
 	public ConvertHexTests(String title, String d, String h, String o) {
 		this.title = title;
-		this.dec = d;
-		this.hex = h;
-		this.oct = o;
+		this.decStr = d;
+		this.hexStr = h;
+		this.octStr = o;
 		this.size = maxSize;
 	}
 
@@ -49,19 +49,19 @@ public class ConvertHexTests {
 	public void testDecimal() {
 		// test the decimal. Use the hex value as reference.
 		BigInt a = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
-		a.fromHexString(this.hex);
+		a.fromHexString(this.hexStr);
 		BigInt b = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
-		b.fromDecString(this.dec);
+		b.fromDecString(this.decStr);
 		assertEquals(a, b);
 	}
 
 	@Test
 	public void testOctal() {
 		// test the octal. Use the hex value as reference.
-		BigInt a = new BigInt(true, 0, this.size / Cell.CELL_BASE);
-		a.fromHexString(this.hex);
-		BigInt b = new BigInt(true, 0, this.size / Cell.CELL_BASE);
-		b.fromOctString(this.oct);
+		BigInt a = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
+		a.fromHexString(this.hexStr);
+		BigInt b = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
+		b.fromOctString(this.octStr);
 		a.reduce();
 		b.reduce();
 		assertEquals(a, b);
