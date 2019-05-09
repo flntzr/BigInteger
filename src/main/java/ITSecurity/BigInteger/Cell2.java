@@ -19,8 +19,7 @@ public class Cell2 {
 	}
 	
 	public int getLower() {
-		int lower = this.value << Cell.CELL_BASE;
-		return lower >>> Cell.CELL_BASE;
+		return this.value & Cell.CELL_BASE_MASK;
 	}
 	
 	public int getUpper() {

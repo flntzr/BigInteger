@@ -12,7 +12,7 @@ public abstract class BigNumber implements Comparable<BigNumber> {
 		this.size = size;
 		this.spart = bigNumber.spart;
 		this.positive = bigNumber.positive;
-		this.cells = new Cell2[bigNumber.cells.length];
+		this.cells = new Cell2[size];
 		for (int i = 0; i < bigNumber.cells.length; i++) {
 			this.cells[i] = new Cell2(bigNumber.cells[i].value);
 		}
