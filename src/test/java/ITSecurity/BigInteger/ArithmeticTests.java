@@ -88,8 +88,8 @@ public class ArithmeticTests {
 		BigInt a = this.hexToBigInt(this.hexOperands[0]);
 		BigInt b = this.hexToBigInt(this.hexOperands[1]);
 		BigInt expected = this.hexToBigInt(this.resultsHex[2]);
-		BigInt result = a.mul(b, a.positive == b.positive);
-		assertEquals(expected, result);
+		a.mul(b, a.positive == b.positive);
+		assertEquals(expected, a);
 	}
 	
 	@Test
@@ -115,8 +115,8 @@ public class ArithmeticTests {
 		BigInt a = this.decToBigInt(this.decOperands[0]);
 		BigInt b = this.decToBigInt(this.decOperands[1]);
 		BigInt expected = this.decToBigInt(this.resultsDec[2]);
-		BigInt result = a.mul(b, a.positive == b.positive);
-		assertEquals(expected, result);
+		a.mul(b, a.positive == b.positive);
+		assertEquals(expected, a);
 	}
 	// TODO: Implement div and mod tests (/, F, %, G)
 }

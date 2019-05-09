@@ -2,7 +2,7 @@ package ITSecurity.BigInteger;
 
 public class BigInt extends BigNumber {
 	public static final int DEFAULT_BIG_INT_SIZE = 2048 / Cell.CELL_BASE;
-	
+
 	public BigInt(BigInt bigInt, int size) {
 		super(size, bigInt);
 	}
@@ -23,7 +23,7 @@ public class BigInt extends BigNumber {
 	}
 
 	public void fromHexString(String str) {
-		// TODO: empty all cells beforehand
+		this.clearCells();
 		str = this.extractPositive(str);
 
 		int subStrSize = Cell.CELL_BASE / 4;
@@ -40,7 +40,7 @@ public class BigInt extends BigNumber {
 	}
 
 	public void fromOctString(String str) {
-		// TODO: empty all cells beforehand
+		this.clearCells();
 		str = this.extractPositive(str);
 		int len = str.length();
 		for (int i = 0; i < len; i++) {
@@ -53,7 +53,7 @@ public class BigInt extends BigNumber {
 	}
 
 	public void fromDecString(String str) {
-		// TODO: empty all cells beforehand
+		this.clearCells();
 		str = this.extractPositive(str);
 		int len = str.length();
 		for (int i = 0; i < len; i++) {
@@ -118,18 +118,19 @@ public class BigInt extends BigNumber {
 //		}
 //	}
 
-	// TODO: Modify reference and don't return a new BigInt.
-	public BigInt mul(BigInt a, boolean positive) {
+	public void mul(BigInt a, boolean positive) {
 		BigNumberUtils.sameSize(this, a);
-		BigInt c = new BigInt(positive, 0, this.size);
+		BigInt c = new BigInt(this, this.size);
 		c.spart = this.spart * 2 + 1;
+		this.clearCells();
+		this.spart = c.spart;
+		this.positive = positive;
 		for (int i = 0; i < a.spart; i++) {
-			for (int j = 0; j < this.spart; j++) {
-				Cell2 tmp = new Cell2(this.cells[j].value * a.cells[i].value);
-				c.addCell2(i + j, tmp);
+			for (int j = 0; j < c.spart; j++) {
+				Cell2 tmp = new Cell2(c.cells[j].value * a.cells[i].value);
+				this.addCell2(i + j, tmp);
 			}
 		}
-		return c;
 	}
 
 	public void mul10() {
@@ -176,7 +177,7 @@ public class BigInt extends BigNumber {
 	protected BigInt clone() {
 		return new BigInt(this, this.size);
 	}
-	
+
 	/**
 	 * Compares this object with the specified object. Ignores the explicit
 	 * 'positive' or 'negative' sign.
@@ -210,6 +211,5 @@ public class BigInt extends BigNumber {
 			return -result;
 		}
 	}
-
 
 }
