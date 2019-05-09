@@ -176,5 +176,40 @@ public class BigInt extends BigNumber {
 	protected BigInt clone() {
 		return new BigInt(this, this.size);
 	}
+	
+	/**
+	 * Compares this object with the specified object. Ignores the explicit
+	 * 'positive' or 'negative' sign.
+	 * 
+	 * @param o
+	 * @return
+	 */
+	public int compareToIgnoringSign(BigNumber o) {
+		for (int i = this.cells.length - 1; i >= 0; i--) {
+			if (this.cells[i].value != o.cells[i].value) {
+				return Integer.compare(this.cells[i].value, o.cells[i].value);
+			}
+		}
+		return 0;
+	}
+
+	@Override
+	public int compareTo(BigNumber o) {
+		int result = this.compareToIgnoringSign(o);
+		if (result == 0) {
+			// +0 and -0 are equal
+			return 0;
+		}
+		if (this.positive && o.positive) {
+			return result;
+		} else if (this.positive && !o.positive) {
+			return 1;
+		} else if (!this.positive && o.positive) {
+			return -1;
+		} else {
+			return -result;
+		}
+	}
+
 
 }
