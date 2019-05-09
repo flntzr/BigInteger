@@ -48,9 +48,9 @@ public class ConvertHexTests {
 	@Test
 	public void testDecimal() {
 		// test the decimal. Use the hex value as reference.
-		BigInt a = new BigInt(true, 0, this.size / Cell.CELL_BASE);
+		BigInt a = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
 		a.fromHexString(this.hex);
-		BigInt b = new BigInt(true, 0, this.size / Cell.CELL_BASE);
+		BigInt b = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
 		b.fromDecString(this.dec);
 		assertEquals(a, b);
 	}

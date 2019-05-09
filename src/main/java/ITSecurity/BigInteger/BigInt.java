@@ -42,16 +42,6 @@ public class BigInt extends BigNumber {
 	public void fromOctString(String str) {
 		// TODO: empty all cells beforehand
 
-		str = this.extractPositive(str);
-		int len = str.length();
-		for (int i = 0; i < len; i++) {
-			int num = Integer.parseUnsignedInt("" + str.charAt(i), 8);
-			BigInt a = new BigInt(this.positive, num, 1);
-			this.mul10();
-			this.add(a, positive);
-		}
-		this.reduce();
-
 //		str = this.extractPositive(str);
 //
 //		int subStrSize = Cell.CELL_BASE / 6;
@@ -68,19 +58,17 @@ public class BigInt extends BigNumber {
 
 	public void fromDecString(String str) {
 		// TODO: empty all cells beforehand
-//		str = this.extractPositive(str);
-//
-//		int subStrSize = Cell.CELL_BASE / 4;
-//		// 1 hex digit equals 4 bits => fit CELL_BASE / 4 characters into a cell
-//		int strLength = str.length();
-//		this.spart = (int) Math.ceil(strLength / subStrSize);
-//		int j = 0;
-//		for (int i = 0; i < strLength; i += subStrSize) {
-//			int startIdx = strLength - i - subStrSize;
-//			int endIdx = strLength - i;
-//			String subStr = str.substring(startIdx, endIdx);
-//			this.cells[j++] = new Cell2(Integer.parseUnsignedInt(subStr, 16));
-//		}
+		
+		str = this.extractPositive(str);
+		int len = str.length();
+		for (int i = 0; i < len; i++) {
+			int num = Integer.parseUnsignedInt("" + str.charAt(i), 10);
+			BigInt a = new BigInt(this.positive, num, this.size);
+			this.mul10();
+			this.add(a, positive);
+			this.reduce();
+		}
+		this.reduce();
 	}
 
 	public void add(BigInt a, boolean positive) {
