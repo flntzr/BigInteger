@@ -59,8 +59,6 @@ public class ConvertHexTests {
 		a.fromHexString(this.hexStr);
 		BigInt b = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
 		b.fromOctString(this.octStr);
-		a.reduce();
-		b.reduce();
 		assertEquals(a, b);
 	}
 
