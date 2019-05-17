@@ -140,7 +140,7 @@ public class BigInt extends BigNumber {
 			this.clearCells();
 			return;
 		}
-		if (this.spart < 3 && this.spart < 3) {
+		if (this.spart < 3 && a.spart < 3) {
 			// dividend and divisor are small enough for CPU to handle division
 			Cell2 dividend = new Cell2();
 			dividend.setLower(new Cell(this.cells[0].getLower()));
