@@ -64,4 +64,13 @@ public final class BigIntUtils {
 		}
 		return c;
 	}
+	
+	public static Cell estimateAlter(Cell cUpper, Cell cLower, Cell divisor) {
+		Cell2 dividend = new Cell2(cUpper);
+		if (dividend.value < divisor.value) {
+			dividend.setLower(cLower);
+			dividend.setUpper(cUpper);
+		}
+		return new Cell(Integer.divideUnsigned(dividend.value, divisor.value));
+	}
 }

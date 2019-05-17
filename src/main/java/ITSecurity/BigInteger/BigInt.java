@@ -120,7 +120,13 @@ public class BigInt extends BigNumber {
 		}
 	}
 
-	public void div(BigInt a, boolean positive) {
+	/**
+	 * Divides this instance by a. Modifies this instance, returns the remainder.
+	 * @param a The divisor
+	 * @param positive If the result is positive.
+	 * @return the rest
+	 */
+	public BigInt divMod(BigInt a, boolean positive) {
 		this.reduce();
 		a.reduce();
 		this.positive = positive;
@@ -133,12 +139,12 @@ public class BigInt extends BigNumber {
 		if (this.spart < a.spart) {
 			// dividend < divisor
 			this.clearCells();
-			return;
+			return r;
 		}
 		if (this.spart == a.spart && this.compareTo(a) < 0) {
 			// dividend < divisor
 			this.clearCells();
-			return;
+			return r;
 		}
 		if (this.spart < 3 && a.spart < 3) {
 			// dividend and divisor are small enough for CPU to handle division
@@ -148,20 +154,22 @@ public class BigInt extends BigNumber {
 			Cell2 divisor = new Cell2();
 			divisor.setLower(new Cell(a.cells[0].getLower()));
 			divisor.setUpper(new Cell(a.cells[1].getLower()));
-			this.cells[0].value = dividend.value / divisor.value;
-			return;
+			this.cells[0].value = Integer.divideUnsigned(dividend.value, divisor.value);
+			r = new BigInt(true, Integer.remainderUnsigned(dividend.value, divisor.value), this.size);
+			return r;
 		}
 		// do full division
 		
 		
 		this.reduce();
 		r.reduce();
+		return r;
 	}
 
 	public void div10() {
 		// TODO: respect sign of BigInt
 		BigInt ten = new BigInt(true, 10, DEFAULT_BIG_INT_SIZE);
-		this.div(ten, true);
+		this.divMod(ten, true);
 	}
 
 	public void mul10() {
