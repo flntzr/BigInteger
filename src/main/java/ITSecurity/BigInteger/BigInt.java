@@ -131,7 +131,7 @@ public class BigInt extends BigNumber {
 		this.reduce();
 		a.reduce();
 		this.positive = positive;
-		BigInt q = new BigInt(this, this.size);
+		BigInt q = new BigInt(positive, 0, this.size);
 		BigInt r = this.clone();
 		r.positive = true;
 		if (a.spart == 0) {
@@ -162,46 +162,62 @@ public class BigInt extends BigNumber {
 		// do full division
 		int k = a.spart;
 		int l = this.spart - k;
+		BigInt rest = new BigInt(true, 0, this.size);
 		for (int i = 0; i < k; i++) {
-			r.cells[i] = new Cell2(this.cells[l + i]);
+			rest.cells[i] = new Cell2(this.cells[l + i]);
 		}
 
 		// TODO: is the following reduce necessary?
 		r.reduce();
 
 		for (int i = l; i >= 0; i--) {
-			Cell rUpper = new Cell(r.cells[r.spart - 1].getLower());
-			Cell rLower = new Cell(r.cells[r.spart - 2].getLower());
+			Cell rUpper = new Cell(r.cells[i].getLower());
+			Cell rLower = i > 0 ? new Cell(r.cells[i - 1].getLower()) : new Cell(0);
 			Cell aUpper = new Cell(a.cells[a.spart - 1].getLower());
 			Cell estimate = BigIntUtils.estimateAlter(rUpper, rLower, aUpper);
 
-			// TODO: use mulCell instead of mul
-			BigInt tmp = new BigInt(true, estimate.value, this.size);
-			tmp.mul(this, true);
+//			BigInt bigEstimate = new BigInt(true, 0, this.size);
+//			bigEstimate.cells[r.spart - 1] = new Cell2(estimate);
+//			bigEstimate.spart = r.spart;
+			// tmp = a * estimate
+			BigInt tmp = a.clone();
+			tmp.mul(new BigInt(true, estimate.value, this.size), true);
 			tmp.reduce();
 
-			if (tmp.compareTo(r) != 0) {
-				while (tmp.compareTo(r) > 0) {
+//			BigInt rest2 = new BigInt(true, 0, this.size);
+//			for (int m = 0; m < tmp.spart; m++) {
+//				rest2.cells[m] = rest.cells[m];
+//			}
+
+			if (tmp.compareTo(rest) != 0) {
+				while (tmp.compareTo(rest) > 0) {
 					// estimated value too high
 					estimate.value--;
-					tmp.sub(a, true);
+					tmp = BigIntUtils.sub(tmp, a);
 				}
-				r.sub(tmp, true);
-				while (r.compareTo(a) > 0) {
+				while (BigIntUtils.sub(rest, tmp).compareTo(a) > 0) {
 					// estimated value too low
 					estimate.value++;
-					tmp.add(a, true);
-					r.sub(tmp, true);
+					tmp = BigIntUtils.add(tmp, a);
 				}
 			}
+			r.reduce();
 			q.cells[i] = new Cell2(estimate);
-			r.sub(tmp, true);
+			rest = BigIntUtils.sub(rest, tmp);
+//			r.sub(tmp, true);
 
 			if (i != 0) {
-				r.shiftLeft(1);
+//				r.shiftLeft(1);
+				// shift r left 1 cell
+				for (int j = rest.spart; j > 0; j--) {
+					rest.cells[j] = rest.cells[j - 1];
+				}
+				rest.cells[0] = new Cell2(this.cells[i - 1]);
 			}
 		}
-
+		q.reduce();
+		this.cells = q.cells;
+		this.spart = q.spart;
 		this.reduce();
 		r.reduce();
 		return r;
