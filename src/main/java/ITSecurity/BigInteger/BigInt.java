@@ -122,7 +122,8 @@ public class BigInt extends BigNumber {
 
 	/**
 	 * Divides this instance by a. Modifies this instance, returns the remainder.
-	 * @param a The divisor
+	 * 
+	 * @param a        The divisor
 	 * @param positive If the result is positive.
 	 * @return the rest
 	 */
@@ -159,8 +160,48 @@ public class BigInt extends BigNumber {
 			return r;
 		}
 		// do full division
-		
-		
+		int k = a.spart;
+		int l = this.spart - k;
+		for (int i = 0; i < k; i++) {
+			r.cells[i] = new Cell2(this.cells[l + i]);
+		}
+
+		// TODO: is the following reduce necessary?
+		r.reduce();
+
+		for (int i = l; i >= 0; i--) {
+			Cell rUpper = new Cell(r.cells[r.spart - 1].getLower());
+			Cell rLower = new Cell(r.cells[r.spart - 2].getLower());
+			Cell aUpper = new Cell(a.cells[a.spart - 1].getLower());
+			Cell estimate = BigIntUtils.estimateAlter(rUpper, rLower, aUpper);
+
+			// TODO: use mulCell instead of mul
+			BigInt tmp = new BigInt(true, estimate.value, this.size);
+			tmp.mul(this, true);
+			tmp.reduce();
+
+			if (tmp.compareTo(r) != 0) {
+				while (tmp.compareTo(r) > 0) {
+					// estimated value too high
+					estimate.value--;
+					tmp.sub(a, true);
+				}
+				r.sub(tmp, true);
+				while (r.compareTo(a) > 0) {
+					// estimated value too low
+					estimate.value++;
+					tmp.add(a, true);
+					r.sub(tmp, true);
+				}
+			}
+			q.cells[i] = new Cell2(estimate);
+			r.sub(tmp, true);
+
+			if (i != 0) {
+				r.shiftLeft(1);
+			}
+		}
+
 		this.reduce();
 		r.reduce();
 		return r;
@@ -169,6 +210,7 @@ public class BigInt extends BigNumber {
 	public void div10() {
 		// TODO: respect sign of BigInt
 		BigInt ten = new BigInt(true, 10, DEFAULT_BIG_INT_SIZE);
+		ten.reduce();
 		this.divMod(ten, true);
 	}
 
