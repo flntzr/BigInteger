@@ -171,24 +171,14 @@ public class BigInt extends BigNumber {
 		r.reduce();
 
 		for (int i = l; i >= 0; i--) {
-			Cell rUpper = new Cell(r.cells[i].getLower());
-			Cell rLower = i > 0 ? new Cell(r.cells[i - 1].getLower()) : new Cell(0);
+			Cell rUpper = new Cell(rest.cells[1].value);
+			Cell rLower = new Cell(rest.cells[0].value);
 			Cell aUpper = new Cell(a.cells[a.spart - 1].getLower());
 			Cell estimate = BigIntUtils.estimateAlter(rUpper, rLower, aUpper);
-
-//			BigInt bigEstimate = new BigInt(true, 0, this.size);
-//			bigEstimate.cells[r.spart - 1] = new Cell2(estimate);
-//			bigEstimate.spart = r.spart;
-			// tmp = a * estimate
 			BigInt tmp = a.clone();
 			tmp.mul(new BigInt(true, estimate.value, this.size), true);
 			tmp.reduce();
-
-//			BigInt rest2 = new BigInt(true, 0, this.size);
-//			for (int m = 0; m < tmp.spart; m++) {
-//				rest2.cells[m] = rest.cells[m];
-//			}
-
+			
 			if (tmp.compareTo(rest) != 0) {
 				while (tmp.compareTo(rest) > 0) {
 					// estimated value too high
@@ -204,16 +194,15 @@ public class BigInt extends BigNumber {
 			r.reduce();
 			q.cells[i] = new Cell2(estimate);
 			rest = BigIntUtils.sub(rest, tmp);
-//			r.sub(tmp, true);
-
+			rest.reduce();
 			if (i != 0) {
-//				r.shiftLeft(1);
 				// shift r left 1 cell
 				for (int j = rest.spart; j > 0; j--) {
 					rest.cells[j] = rest.cells[j - 1];
 				}
 				rest.cells[0] = new Cell2(this.cells[i - 1]);
 			}
+			rest.reduce();
 		}
 		q.reduce();
 		this.cells = q.cells;
