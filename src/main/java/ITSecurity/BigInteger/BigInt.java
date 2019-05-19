@@ -193,7 +193,10 @@ public class BigInt extends BigNumber {
 			Cell2 divisor = new Cell2();
 			divisor.setLower(new Cell(a.cells[0].getLower()));
 			divisor.setUpper(new Cell(a.cells[1].getLower()));
-			this.cells[0].value = Integer.divideUnsigned(dividend.value, divisor.value);
+			this.clearCells();
+			Cell2 result = new Cell2(Integer.divideUnsigned(dividend.value, divisor.value));
+			this.cells[0].value = result.getLower();
+			this.cells[1].value = result.getUpper();
 			r = new BigInt(true, Integer.remainderUnsigned(dividend.value, divisor.value), this.size);
 			r.reduce();
 			return correctRemainder ? this.correctMod(a, r, positive) : r;
