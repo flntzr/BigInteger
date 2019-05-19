@@ -226,7 +226,7 @@ public class BigInt extends BigNumber {
 					estimate.value--;
 					tmp = BigIntUtils.sub(tmp, a);
 				}
-				while (BigIntUtils.sub(r, tmp).compareTo(a) > 0) {
+				while (BigIntUtils.sub(r, tmp).compareToIgnoringSign(a) > 0) {
 					// estimated value too low
 					estimate.value++;
 					tmp = BigIntUtils.add(tmp, a);

@@ -95,6 +95,9 @@ public final class BigIntUtils {
 			dividend.setLower(cLower);
 			dividend.setUpper(cUpper);
 		}
+		if (divisor.value == 0) {
+			return new Cell(0);
+		}
 		return new Cell(Integer.divideUnsigned(dividend.value, divisor.value));
 	}
 }
