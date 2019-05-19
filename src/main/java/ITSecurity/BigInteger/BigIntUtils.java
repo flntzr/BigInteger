@@ -64,7 +64,11 @@ public final class BigIntUtils {
 		}
 		return c;
 	}
-	
+
+	public static BigInt divMod(BigInt a, BigInt b) {
+		return a.divMod(b, a.positive == b.positive);
+	}
+
 	public static Cell estimateAlter(Cell cUpper, Cell cLower, Cell divisor) {
 		Cell2 dividend = new Cell2(cUpper);
 		if (dividend.value < divisor.value) {

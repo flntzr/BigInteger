@@ -140,11 +140,13 @@ public class BigInt extends BigNumber {
 		if (this.spart < a.spart) {
 			// dividend < divisor
 			this.clearCells();
+			this.positive = true;
 			return r;
 		}
 		if (this.spart == a.spart && this.compareTo(a) < 0) {
 			// dividend < divisor
 			this.clearCells();
+			this.positive = true;
 			return r;
 		}
 		if (this.spart < 3 && a.spart < 3) {
@@ -156,6 +158,9 @@ public class BigInt extends BigNumber {
 			divisor.setLower(new Cell(a.cells[0].getLower()));
 			divisor.setUpper(new Cell(a.cells[1].getLower()));
 			this.cells[0].value = Integer.divideUnsigned(dividend.value, divisor.value);
+			if (this.cells[0].value == 0) {
+				this.positive = true;
+			}
 			r = new BigInt(true, Integer.remainderUnsigned(dividend.value, divisor.value), this.size);
 			return r;
 		}
@@ -177,7 +182,7 @@ public class BigInt extends BigNumber {
 			// TODO: use cell multiplication instead!
 			tmp.mul(new BigInt(true, estimate.value, this.size), true);
 			tmp.reduce();
-			
+
 			if (tmp.compareTo(r) != 0) {
 				while (tmp.compareTo(r) > 0) {
 					// estimated value too high
@@ -205,6 +210,9 @@ public class BigInt extends BigNumber {
 		q.reduce();
 		this.cells = q.cells;
 		this.spart = q.spart;
+		if (this.spart == 0) {
+			this.positive = true;
+		}
 		return r;
 	}
 
@@ -212,7 +220,7 @@ public class BigInt extends BigNumber {
 		// TODO: respect sign of BigInt
 		BigInt ten = new BigInt(true, 10, DEFAULT_BIG_INT_SIZE);
 		ten.reduce();
-		this.divMod(ten, true);
+		BigIntUtils.divMod(this, ten);
 	}
 
 	public void mul10() {
