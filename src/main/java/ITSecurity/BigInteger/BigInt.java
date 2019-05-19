@@ -143,6 +143,7 @@ public class BigInt extends BigNumber {
 
 	public void div(BigInt a, boolean positive) {
 		this.divMod(a, positive, false);
+		this.reduce();
 		if (this.spart == 0) {
 			this.positive = true;
 		}
