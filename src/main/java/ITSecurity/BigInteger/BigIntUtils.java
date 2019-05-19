@@ -66,7 +66,9 @@ public final class BigIntUtils {
 	}
 
 	/**
-	 * Divides a by b. Modifies a and returns the remainder.
+	 * Divides a by b. Modifies a and returns the remainder. The remainder is
+	 * corrected to be positive.
+	 * 
 	 * @param a The dividend. Will be modified.
 	 * @param b The divisor.
 	 * @return The remainder.
@@ -74,6 +76,17 @@ public final class BigIntUtils {
 	public static BigInt divMod(BigInt a, BigInt b) {
 		// TODO: Like 'add' and 'sub' don't directly modify the instance..
 		return a.divMod(b, a.positive == b.positive);
+	}
+
+	/**
+	 * Divides a by b. Doesn't correct the remainder to be positive.
+	 * 
+	 * @param a
+	 * @param b
+	 */
+	public static void div(BigInt a, BigInt b) {
+		// TODO: Like 'add' and 'sub' don't directly modify the instance..
+		a.div(b, a.positive == b.positive);
 	}
 
 	public static Cell estimateAlter(Cell cUpper, Cell cLower, Cell divisor) {

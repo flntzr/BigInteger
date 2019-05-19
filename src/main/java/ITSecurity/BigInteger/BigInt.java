@@ -126,7 +126,7 @@ public class BigInt extends BigNumber {
 			// Add the divisor to the remainder once (so it is positive!).
 			// Subtract 1 from the division result.
 			r.positive = false;
-			a.positive=true;
+			a.positive = true;
 			r = BigIntUtils.add(r, a);
 			BigInt one = new BigInt(true, 1, this.size);
 			this.add(one, this.positive);
@@ -141,14 +141,28 @@ public class BigInt extends BigNumber {
 		return r;
 	}
 
+	public void div(BigInt a, boolean positive) {
+		this.divMod(a, positive, false);
+		if (this.spart == 0) {
+			this.positive = true;
+		}
+	}
+
+	public BigInt divMod(BigInt a, boolean positive) {
+		return this.divMod(a, positive, true);
+	}
+
 	/**
 	 * Divides this instance by a. Modifies this instance, returns the remainder.
+	 * Ensures the remainder is always positive!
 	 * 
-	 * @param a        The divisor
-	 * @param positive If the result is positive.
+	 * @param a                The divisor
+	 * @param positive         If the result is positive.
+	 * @param correctRemainder If we want to ensure that the remainder is positive.
+	 *                         This is only important if we require the remainder..
 	 * @return the rest
 	 */
-	public BigInt divMod(BigInt a, boolean positive) {
+	private BigInt divMod(BigInt a, boolean positive, boolean correctRemainder) {
 		this.reduce();
 //		boolean requiresCorrecting = !this.positive;
 		a.reduce();
@@ -163,13 +177,13 @@ public class BigInt extends BigNumber {
 			// dividend < divisor
 			this.clearCells();
 //			this.positive = true;
-			return this.correctMod(a, r, positive);
+			return correctRemainder ? this.correctMod(a, r, positive) : r;
 		}
 		if (this.spart == a.spart && this.compareToIgnoringSign(a) < 0) {
 			// dividend < divisor
 			this.clearCells();
 //			this.positive = true;
-			return this.correctMod(a, r, positive);
+			return correctRemainder ? this.correctMod(a, r, positive) : r;
 		}
 		if (this.spart < 3 && a.spart < 3) {
 			// dividend and divisor are small enough for CPU to handle division
@@ -182,7 +196,7 @@ public class BigInt extends BigNumber {
 			this.cells[0].value = Integer.divideUnsigned(dividend.value, divisor.value);
 			r = new BigInt(true, Integer.remainderUnsigned(dividend.value, divisor.value), this.size);
 			r.reduce();
-			return this.correctMod(a, r, positive);
+			return correctRemainder ? this.correctMod(a, r, positive) : r;
 		}
 		// do full division
 		int k = a.spart;
@@ -233,14 +247,14 @@ public class BigInt extends BigNumber {
 		if (this.spart == 0) {
 			this.positive = true;
 		}
-		return this.correctMod(a, r, positive);
+		return correctRemainder ? this.correctMod(a, r, positive) : r;
 	}
 
 	public void div10() {
 		// TODO: respect sign of BigInt
 		BigInt ten = new BigInt(true, 10, DEFAULT_BIG_INT_SIZE);
 		ten.reduce();
-		BigIntUtils.divMod(this, ten);
+		BigIntUtils.div(this, ten);
 	}
 
 	public void mul10() {
