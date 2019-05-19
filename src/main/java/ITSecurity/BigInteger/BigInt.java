@@ -78,7 +78,6 @@ public class BigInt extends BigNumber {
 		if (over.value != 0) {
 			this.cells[this.spart] = over;
 		} else {
-			// TODO: does this make sense?
 			this.spart--;
 		}
 		this.positive = positive;
@@ -98,7 +97,6 @@ public class BigInt extends BigNumber {
 		}
 		this.cells[this.spart] = over;
 		if (over.value == 0) {
-			// TODO: does this make sense?
 			this.spart--;
 		}
 		this.positive = positive;
@@ -165,9 +163,7 @@ public class BigInt extends BigNumber {
 	 */
 	private BigInt divMod(BigInt a, boolean positive, boolean correctRemainder) {
 		this.reduce();
-//		boolean requiresCorrecting = !this.positive;
 		a.reduce();
-//		this.positive = positive;
 		BigInt q = new BigInt(positive, 0, this.size);
 		BigInt r = this.clone();
 		r.positive = true;
@@ -175,15 +171,11 @@ public class BigInt extends BigNumber {
 			throw new RuntimeException("Cannot divide by 0");
 		}
 		if (this.spart < a.spart) {
-			// dividend < divisor
 			this.clearCells();
-//			this.positive = true;
 			return correctRemainder ? this.correctMod(a, r, positive) : r;
 		}
 		if (this.spart == a.spart && this.compareToIgnoringSign(a) < 0) {
-			// dividend < divisor
 			this.clearCells();
-//			this.positive = true;
 			return correctRemainder ? this.correctMod(a, r, positive) : r;
 		}
 		if (this.spart < 3 && a.spart < 3) {
@@ -255,7 +247,6 @@ public class BigInt extends BigNumber {
 	}
 
 	public void div10() {
-		// TODO: respect sign of BigInt
 		BigInt ten = new BigInt(true, 10, DEFAULT_BIG_INT_SIZE);
 		ten.reduce();
 		BigIntUtils.div(this, ten);

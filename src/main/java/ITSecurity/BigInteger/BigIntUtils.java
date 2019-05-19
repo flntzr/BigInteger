@@ -74,7 +74,6 @@ public final class BigIntUtils {
 	 * @return The remainder.
 	 */
 	public static BigInt divMod(BigInt a, BigInt b) {
-		// TODO: Like 'add' and 'sub' don't directly modify the instance..
 		return a.divMod(b, a.positive == b.positive);
 	}
 
@@ -85,7 +84,6 @@ public final class BigIntUtils {
 	 * @param b
 	 */
 	public static void div(BigInt a, BigInt b) {
-		// TODO: Like 'add' and 'sub' don't directly modify the instance..
 		a.div(b, a.positive == b.positive);
 	}
 

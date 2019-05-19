@@ -1,7 +1,5 @@
 package ITSecurity.BigInteger;
 
-import java.util.stream.Collectors;
-
 public abstract class BigNumber implements Comparable<BigNumber> {
 	protected int size;
 	protected int spart;
