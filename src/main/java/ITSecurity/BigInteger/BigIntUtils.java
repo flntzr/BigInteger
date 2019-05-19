@@ -65,6 +65,12 @@ public final class BigIntUtils {
 		return c;
 	}
 
+	/**
+	 * Divides a by b. Modifies a and returns the remainder.
+	 * @param a The dividend. Will be modified.
+	 * @param b The divisor.
+	 * @return The remainder.
+	 */
 	public static BigInt divMod(BigInt a, BigInt b) {
 		return a.divMod(b, a.positive == b.positive);
 	}

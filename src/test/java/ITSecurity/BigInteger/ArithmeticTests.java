@@ -118,5 +118,21 @@ public class ArithmeticTests {
 		a.mul(b, a.positive == b.positive);
 		assertEquals(expected, a);
 	}
+	
+	@Test
+	public void divModDec() {
+		BigInt a = this.decToBigInt(this.decOperands[0]);
+		BigInt b = this.decToBigInt(this.decOperands[1]);
+		BigInt expectedDiv = this.decToBigInt(this.resultsDec[3]);
+		BigInt expectedR = this.decToBigInt(this.resultsDec[4]);
+		try {
+			BigInt r = BigIntUtils.divMod(a, b);			
+			assertEquals(expectedDiv, a);
+			assertEquals(r, expectedR);
+		} catch (RuntimeException e) {
+			assertEquals("Cannot divide by 0", e.getMessage());
+			assertEquals(b.spart, 0);
+		}
+	}
 	// TODO: Implement div and mod tests (/, F, %, G)
 }
