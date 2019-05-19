@@ -162,53 +162,49 @@ public class BigInt extends BigNumber {
 		// do full division
 		int k = a.spart;
 		int l = this.spart - k;
-		BigInt rest = new BigInt(true, 0, this.size);
+		r.clearCells();
 		for (int i = 0; i < k; i++) {
-			rest.cells[i] = new Cell2(this.cells[l + i]);
+			r.cells[i] = new Cell2(this.cells[l + i]);
 		}
-
-		// TODO: is the following reduce necessary?
 		r.reduce();
 
 		for (int i = l; i >= 0; i--) {
-			Cell rUpper = new Cell(rest.cells[1].value);
-			Cell rLower = new Cell(rest.cells[0].value);
+			Cell rUpper = new Cell(r.cells[1].value);
+			Cell rLower = new Cell(r.cells[0].value);
 			Cell aUpper = new Cell(a.cells[a.spart - 1].getLower());
 			Cell estimate = BigIntUtils.estimateAlter(rUpper, rLower, aUpper);
 			BigInt tmp = a.clone();
+			// TODO: use cell multiplication instead!
 			tmp.mul(new BigInt(true, estimate.value, this.size), true);
 			tmp.reduce();
 			
-			if (tmp.compareTo(rest) != 0) {
-				while (tmp.compareTo(rest) > 0) {
+			if (tmp.compareTo(r) != 0) {
+				while (tmp.compareTo(r) > 0) {
 					// estimated value too high
 					estimate.value--;
 					tmp = BigIntUtils.sub(tmp, a);
 				}
-				while (BigIntUtils.sub(rest, tmp).compareTo(a) > 0) {
+				while (BigIntUtils.sub(r, tmp).compareTo(a) > 0) {
 					// estimated value too low
 					estimate.value++;
 					tmp = BigIntUtils.add(tmp, a);
 				}
 			}
-			r.reduce();
 			q.cells[i] = new Cell2(estimate);
-			rest = BigIntUtils.sub(rest, tmp);
-			rest.reduce();
+			r = BigIntUtils.sub(r, tmp);
+			r.reduce();
 			if (i != 0) {
 				// shift r left 1 cell
-				for (int j = rest.spart; j > 0; j--) {
-					rest.cells[j] = rest.cells[j - 1];
+				for (int j = r.spart; j > 0; j--) {
+					r.cells[j] = r.cells[j - 1];
 				}
-				rest.cells[0] = new Cell2(this.cells[i - 1]);
+				r.cells[0] = new Cell2(this.cells[i - 1]);
+				r.reduce();
 			}
-			rest.reduce();
 		}
 		q.reduce();
 		this.cells = q.cells;
 		this.spart = q.spart;
-		this.reduce();
-		r.reduce();
 		return r;
 	}
 
