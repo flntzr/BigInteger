@@ -134,5 +134,20 @@ public class ArithmeticTests {
 			assertEquals(b.spart, 0);
 		}
 	}
-	// TODO: Implement div and mod tests (/, F, %, G)
+	
+	@Test
+	public void divModHex() {
+		BigInt a = this.hexToBigInt(this.hexOperands[0]);
+		BigInt b = this.hexToBigInt(this.hexOperands[1]);
+		BigInt expectedDiv = this.hexToBigInt(this.resultsHex[3]);
+		BigInt expectedR = this.hexToBigInt(this.resultsHex[4]);
+		try {
+			BigInt r = BigIntUtils.divMod(a, b);			
+			assertEquals(expectedDiv, a);
+			assertEquals(r, expectedR);
+		} catch (RuntimeException e) {
+			assertEquals("Cannot divide by 0", e.getMessage());
+			assertEquals(b.spart, 0);
+		}
+	}
 }
