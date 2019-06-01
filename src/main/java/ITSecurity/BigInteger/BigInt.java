@@ -25,6 +25,9 @@ public class BigInt extends BigNumber {
 	public void fromHexString(String str) {
 		this.clearCells();
 		str = this.extractPositive(str);
+		if (str.startsWith("0x")) {
+			str = str.substring(2);
+		}
 
 		int subStrSize = Cell.CELL_BASE / 4;
 		// 1 hex digit equals 4 bits => fit CELL_BASE / 4 characters into a cell
@@ -244,6 +247,26 @@ public class BigInt extends BigNumber {
 			this.positive = true;
 		}
 		return correctRemainder ? this.correctMod(a, r, positive) : r;
+	}
+
+	public void pow(BigInt n) {
+		BigInt zero = new BigInt(true, 0, this.size);
+		if (n.compareTo(zero) < 0) {
+			throw new RuntimeException("The exponent must be >= 0.");
+		}
+		if (n.compareTo(zero) == 0) {
+			this.positive = true;
+			this.clearCells();
+			this.cells[0].value = 1;
+			return;
+		}
+		BigInt one = new BigInt(true, 1, this.size);
+		if (n.compareTo(one) == 0) {
+			return;
+		}
+
+		BigInt tmp = new BigInt(this, this.size);
+
 	}
 
 	public void div10() {
