@@ -40,6 +40,7 @@ public class BigInt extends BigNumber {
 			String subStr = str.substring(startIdx, endIdx);
 			this.cells[j++] = new Cell2(Integer.parseUnsignedInt(subStr, 16));
 		}
+		this.reduce();
 	}
 
 	public void fromOctString(String str) {
@@ -265,8 +266,41 @@ public class BigInt extends BigNumber {
 			return;
 		}
 
-		BigInt tmp = new BigInt(this, this.size);
+		boolean sign = this.positive || n.isEven();
+		BigInt t = this.clone();
 
+		// set value of 'this' to 1
+		this.clearCells();
+		this.cells[0].value = 1;
+
+		while (n.compareTo(zero) > 0) {
+			boolean isBitOne = !n.isEven();
+			n.shiftRight(1);
+			if (isBitOne) {
+				this.mul(t, true);
+			}
+			t.square();
+		}
+		this.positive = sign;
+	}
+
+	public boolean isEven() {
+		return (this.cells[0].value & 1) == 0;
+	}
+
+	public void square() {
+		BigInt a = this.clone();
+		this.clearCells();
+		int tmp;
+		for (int i = 0; i < a.spart; i++) {
+			for (int j = i + 1; j < a.spart; j++) {
+				tmp = a.cells[i].value * a.cells[j].value;
+				this.addCell2(i + j, new Cell2(tmp));
+				this.addCell2(i + j, new Cell2(tmp));
+			}
+			tmp = a.cells[i].value * a.cells[i].value;
+			this.addCell2(2 * i, new Cell2(tmp));
+		}
 	}
 
 	public void div10() {
@@ -284,7 +318,6 @@ public class BigInt extends BigNumber {
 	}
 
 	public void addCell2(int index, Cell2 cell) {
-		this.spart++;
 		Cell2 tmp = new Cell2(cell);
 		Cell2 over = new Cell2(cell);
 		while (over.value != 0) {
@@ -292,6 +325,7 @@ public class BigInt extends BigNumber {
 			this.cells[index++].value = tmp.getLower();
 			over.value = tmp.getUpper() + over.getUpper();
 		}
+		this.reduce();
 	}
 
 	/**

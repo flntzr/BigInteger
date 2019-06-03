@@ -24,6 +24,7 @@ public abstract class BigNumber implements Comparable<BigNumber> {
 			this.cells[i] = new Cell2();
 		}
 		this.cells[0].value = value;
+		this.reduce();
 	}
 
 	public void reduce() {
