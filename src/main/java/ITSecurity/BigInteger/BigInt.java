@@ -301,6 +301,7 @@ public class BigInt extends BigNumber {
 			tmp = a.cells[i].value * a.cells[i].value;
 			this.addCell2(2 * i, new Cell2(tmp));
 		}
+		this.positive = true;
 	}
 
 	public void div10() {
