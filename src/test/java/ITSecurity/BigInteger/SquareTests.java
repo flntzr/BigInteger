@@ -48,6 +48,11 @@ public class SquareTests {
 		this.decVals = new String[] { decA, decB, decC, decD, decE, decF, decG, decH, decI };
 	}
 
+	/**
+	 * Squares number n times, i.e. num**(2**n). 
+	 * Uses the hexadecimal numbers from the test file.
+	 * @param n
+	 */
 	private void testHexSquare(int n) {
 		BigInt a = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
 		a.fromHexString(this.hexVals[0]);
@@ -59,6 +64,11 @@ public class SquareTests {
 		assertEquals(b, a);
 	}
 
+	/**
+	 * Squares number n times, i.e. num**(2**n). 
+	 * Uses the decimal numbers from the test file.
+	 * @param n
+	 */
 	private void testDecSquare(int n) {
 		BigInt a = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
 		a.fromDecString(this.decVals[0]);
@@ -71,49 +81,43 @@ public class SquareTests {
 	}
 
 	@Test
-	public void pow0() {
-		this.testHexSquare(0);
-		this.testDecSquare(0);
-	}
-
-	@Test
-	public void pow1() {
+	public void pow2() {
 		this.testHexSquare(1);
 		this.testDecSquare(1);
 	}
 
 	@Test
-	public void pow2() {
+	public void pow4() {
 		this.testHexSquare(2);
 		this.testDecSquare(2);
 	}
 
 	@Test
-	public void pow3() {
+	public void pow8() {
 		this.testHexSquare(3);
 		this.testDecSquare(3);
 	}
 
 	@Test
-	public void pow4() {
+	public void pow16() {
 		this.testHexSquare(4);
 		this.testDecSquare(4);
 	}
 
 	@Test
-	public void pow5() {
+	public void pow32() {
 		this.testHexSquare(5);
 		this.testDecSquare(5);
 	}
 
 	@Test
-	public void pow6() {
+	public void pow64() {
 		this.testHexSquare(6);
 		this.testDecSquare(6);
 	}
 
 	@Test
-	public void pow7() {
+	public void pow128() {
 		this.testHexSquare(7);
 		this.testDecSquare(7);
 	}
