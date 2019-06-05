@@ -284,6 +284,47 @@ public class BigInt extends BigNumber {
 		this.positive = sign;
 	}
 
+	/**
+	 * Uses the binary euclid algorithm to determine the greatest common
+	 * denominator, which is then saved to 'this'.
+	 * 
+	 * @param b The other BigInt.
+	 */
+	public void binGcd(BigInt b) {
+		BigInt a = this.clone();
+		BigInt bClone = b.clone();
+		// use 'this' instead of 'b' from here one
+		int k;
+		for (k = 0; a.isEven() && bClone.isEven(); k++) {
+			a.shiftRight(1);
+			bClone.shiftRight(1);
+		}
+		while (a.spart != 0) {
+			while (a.isEven()) {
+				a.shiftRight(1);
+			}
+			while (bClone.isEven()) {
+				bClone.shiftRight(1);
+			}
+			if (a.compareToIgnoringSign(bClone) < 0) {
+				BigInt t = a;
+				a = bClone;
+				bClone = t;
+			}
+			a.sub(bClone, true);
+			a.reduce();
+			bClone.reduce();
+		}
+
+		for (; k > 0; k--) {
+			bClone.shiftLeft(1);
+		}
+		this.cells = bClone.cells;
+		this.positive = true;
+		this.size = bClone.size;
+		this.spart = bClone.spart;
+	}
+
 	public boolean isEven() {
 		return (this.cells[0].value & 1) == 0;
 	}
