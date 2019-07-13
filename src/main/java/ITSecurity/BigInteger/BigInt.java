@@ -151,13 +151,21 @@ public class BigInt extends BigNumber {
 		}
 	}
 
+	/**
+	 * Divides this instance by a. Modifies this instance, returns the remainder.
+	 * Ensures the remainder is always positive.
+	 * 
+	 * @param a        The divisor
+	 * @param positive If the result is positive.
+	 * @return the rest
+	 */
 	public BigInt divMod(BigInt a, boolean positive) {
 		return this.divMod(a, positive, true);
 	}
 
 	/**
 	 * Divides this instance by a. Modifies this instance, returns the remainder.
-	 * Ensures the remainder is always positive!
+	 * Ensures the remainder is always positive if correctRemained is true!
 	 * 
 	 * @param a                The divisor
 	 * @param positive         If the result is positive.
@@ -281,6 +289,44 @@ public class BigInt extends BigNumber {
 			}
 			t.square();
 		}
+		this.positive = sign;
+	}
+
+	public void powMod(BigInt n, BigInt m) {
+		BigInt zero = new BigInt(true, 0, this.size);
+		if (n.compareTo(zero) < 0) {
+			throw new RuntimeException("The exponent must be >= 0.");
+		}
+		if (n.compareTo(zero) == 0) {
+			this.positive = true;
+			this.clearCells();
+			this.cells[0].value = 1;
+			return;
+		}
+		BigInt one = new BigInt(true, 1, this.size);
+		if (n.compareTo(one) == 0) {
+			return;
+		}
+
+		boolean sign = this.positive || n.isEven();
+		BigInt t = this.clone();
+
+		BigInt result = new BigInt(sign, 1, DEFAULT_BIG_INT_SIZE);
+		while (n.compareTo(zero) > 0) {
+			boolean isBitOne = !n.isEven();
+			n.shiftRight(1);
+			if (isBitOne) {
+				result.mul(t, true);
+				result = result.divMod(m, isBitOne);
+//				t.mul(t, true);
+//				this.divMod(m, true);
+			}
+			t.square();
+			t = t.divMod(m, true);
+		}
+		// set value of 'this' to 1
+		this.clearCells();
+		this.cells = result.cells;
 		this.positive = sign;
 	}
 
