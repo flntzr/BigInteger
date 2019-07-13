@@ -58,7 +58,7 @@ public class PowerModPrimTests {
 	}
 
 	private void testPowMod(BigInt base, BigInt power, BigInt mod, BigInt expected) {
-		base.powMod(power, mod);
+		base.powModPrim(power, mod);
 		assertEquals(expected, base);
 	}
 

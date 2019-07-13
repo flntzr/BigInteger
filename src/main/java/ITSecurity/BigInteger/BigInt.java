@@ -292,6 +292,12 @@ public class BigInt extends BigNumber {
 		this.positive = sign;
 	}
 
+	/**
+	 * Power with modulo. Calculates this^n mod m. Modifies this instance.
+	 * 
+	 * @param n The power
+	 * @param m The module
+	 */
 	public void powMod(BigInt n, BigInt m) {
 		BigInt zero = new BigInt(true, 0, this.size);
 		if (n.compareTo(zero) < 0) {
@@ -318,8 +324,6 @@ public class BigInt extends BigNumber {
 			if (isBitOne) {
 				result.mul(t, true);
 				result = result.divMod(m, isBitOne);
-//				t.mul(t, true);
-//				this.divMod(m, true);
 			}
 			t.square();
 			t = t.divMod(m, true);
@@ -331,6 +335,35 @@ public class BigInt extends BigNumber {
 	}
 
 	/**
+	 * Power with modulo where the modulo is a prime. Calculates this^n mod p.
+	 * Modifies this instance.
+	 * 
+	 * @param n The power
+	 * @param p The module
+	 */
+	public void powModPrim(BigInt n, BigInt p) {
+		BigInt pMinus1 = p.clone();
+		pMinus1.sub(new BigInt(true, 1, DEFAULT_BIG_INT_SIZE), positive);
+		if (n.compareTo(pMinus1) < 0) {
+			this.powMod(n, p);
+			return;
+		}
+		if (this.compareTo(p) < 0) {
+			// gcd(a,p) = 1 -> a^p = a (mod p)
+			n = n.divMod(pMinus1, true);
+			this.powMod(n, p);
+			return;
+		}
+		BigInt gcd = this.clone();
+		gcd.binGcd(p);
+		if (gcd.spart == 1 && gcd.cells[0].value == 1) {
+			n = n.divMod(pMinus1,true);
+		}
+		this.powMod(n, p);
+
+	}
+
+	/**
 	 * Uses the binary euclid algorithm to determine the greatest common
 	 * denominator, which is then saved to 'this'.
 	 * 
@@ -339,7 +372,7 @@ public class BigInt extends BigNumber {
 	public void binGcd(BigInt b) {
 		BigInt a = this.clone();
 		BigInt bClone = b.clone();
-		// use 'this' instead of 'b' from here one
+		// use 'this' instead of 'b' from here on
 		int k;
 		for (k = 0; a.isEven() && bClone.isEven(); k++) {
 			a.shiftRight(1);
