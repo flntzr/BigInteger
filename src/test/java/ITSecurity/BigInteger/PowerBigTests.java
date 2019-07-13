@@ -12,7 +12,7 @@ import org.junit.runners.Parameterized;
 
 @RunWith(Parameterized.class)
 public class PowerBigTests {
-	private static String testFilePath = "src/test/java/ITSecurity/BigInteger/test_files/Power-Small-Tests.txt";
+	private static String testFilePath = "src/test/java/ITSecurity/BigInteger/test_files/Power-Big-Tests.txt";
 
 	private String title;
 	private int size;

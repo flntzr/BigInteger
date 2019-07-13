@@ -1,7 +1,7 @@
 package ITSecurity.BigInteger;
 
 public class BigInt extends BigNumber {
-	public static final int DEFAULT_BIG_INT_SIZE = 2048 / Cell.CELL_BASE;
+	public static final int DEFAULT_BIG_INT_SIZE = 4096 / Cell.CELL_BASE;
 
 	public BigInt(BigInt bigInt, int size) {
 		super(size, bigInt);
