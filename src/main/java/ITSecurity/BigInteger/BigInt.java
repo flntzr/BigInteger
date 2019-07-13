@@ -357,7 +357,7 @@ public class BigInt extends BigNumber {
 		BigInt gcd = this.clone();
 		gcd.binGcd(p);
 		if (gcd.spart == 1 && gcd.cells[0].value == 1) {
-			n = n.divMod(pMinus1,true);
+			n = n.divMod(pMinus1, true);
 		}
 		this.powMod(n, p);
 
@@ -422,6 +422,14 @@ public class BigInt extends BigNumber {
 			this.addCell2(2 * i, new Cell2(tmp));
 		}
 		this.positive = true;
+	}
+
+	public boolean isPrimeFermat(BigInt base) {
+		base = base.divMod(this, true);
+		BigInt baseClone = base.clone();
+		BigInt thisClone = this.clone();
+		base.powMod(this, thisClone);
+		return base.equals(baseClone);
 	}
 
 	public void div10() {
