@@ -323,7 +323,7 @@ public class BigInt extends BigNumber {
 			n.shiftRight(1);
 			if (isBitOne) {
 				result.mul(t, true);
-				result = result.divMod(m, isBitOne);
+				result = result.divMod(m, true);
 			}
 			t.square();
 			t = t.divMod(m, true);
@@ -422,6 +422,7 @@ public class BigInt extends BigNumber {
 			this.addCell2(2 * i, new Cell2(tmp));
 		}
 		this.positive = true;
+		this.reduce();
 	}
 
 	public boolean isPrimeFermat(BigInt base) {
