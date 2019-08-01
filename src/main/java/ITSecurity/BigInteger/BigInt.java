@@ -433,6 +433,19 @@ public class BigInt extends BigNumber {
 		return base.equals(baseClone);
 	}
 
+	public boolean isPrimeEuler(BigInt base) {
+		BigInt one = new BigInt(true, 1, this.size);
+		BigInt thisClone = this.clone();
+		base = base.divMod(this, true);
+		BigInt exponent = this.clone();
+		exponent.sub(one, positive);
+		exponent.shiftRight(1);
+		base.powMod(exponent, thisClone);
+		// the value should equal +-1 -> drop the sign!
+		base.positive = true;
+		return base.equals(one);
+	}
+
 	public void div10() {
 		BigInt ten = new BigInt(true, 10, DEFAULT_BIG_INT_SIZE);
 		ten.reduce();
