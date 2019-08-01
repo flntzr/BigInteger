@@ -426,8 +426,8 @@ public class BigInt extends BigNumber {
 	}
 
 	public boolean isPrimeFermat(BigInt base) {
-		base = base.divMod(this, true);
 		BigInt baseClone = base.clone();
+		baseClone = baseClone.divMod(this, true);
 		BigInt thisClone = this.clone();
 		base.powMod(this, thisClone);
 		return base.equals(baseClone);
@@ -435,12 +435,11 @@ public class BigInt extends BigNumber {
 
 	public boolean isPrimeEuler(BigInt base) {
 		BigInt one = new BigInt(true, 1, this.size);
-		BigInt thisClone = this.clone();
-		base = base.divMod(this, true);
+//		base = base.divMod(this, true);
 		BigInt exponent = this.clone();
 		exponent.sub(one, positive);
 		exponent.shiftRight(1);
-		base.powMod(exponent, thisClone);
+		base.powMod(exponent, this);
 		// the value should equal +-1 -> drop the sign!
 		base.positive = true;
 		return base.equals(one);
