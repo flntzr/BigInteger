@@ -30,10 +30,20 @@ public class TestFileReader {
 				} else {
 					String[] splitLine = line.split("=");
 					if (splitLine.length != 2 || splitLine[1].isEmpty()) {
-						testCase.map.put(splitLine[0], "");
+						testCase.map.put(splitLine[0], "");						
 					} else if (splitLine[0].equals("t")) {
 						testCase.title = splitLine[1];
 					} else {
+						while (testCase.map.get(splitLine[0]) != null) {
+							// There is already a value specified for that key. Append a number.
+							// e.g. in primeNumberTests.txt: split "a" into keys "a", "a0", "a1", "a2", ...
+							if (splitLine[0].length() == 1) {
+								splitLine[0] = splitLine[0].concat("0");
+							} else {
+								int number = Integer.parseInt(splitLine[0].substring(1, splitLine[0].length()));
+								splitLine[0] = splitLine[0].substring(0, 1) + ++number;
+							}
+						}
 						testCase.map.put(splitLine[0], splitLine[1]);
 					}
 				}

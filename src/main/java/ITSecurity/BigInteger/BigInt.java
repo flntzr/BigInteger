@@ -442,7 +442,12 @@ public class BigInt extends BigNumber {
 		base.powMod(exponent, this);
 		// the value should equal +-1 -> drop the sign!
 		base.positive = true;
-		return base.equals(one);
+		if (base.equals(one)) {
+			return true;
+		}
+		BigInt result = BigIntUtils.sub(base, this);
+		result.positive = true;
+		return result.equals(one);
 	}
 
 	public void div10() {
