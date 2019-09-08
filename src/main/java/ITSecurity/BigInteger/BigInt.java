@@ -425,7 +425,7 @@ public class BigInt extends BigNumber {
 		this.positive = true;
 		this.reduce();
 	}
-	
+
 	public boolean isPrimeFermat(BigInt[] bases) {
 		for (BigInt base : bases) {
 			boolean isPrimeFermat = this.isPrimeFermat(base);
@@ -435,7 +435,7 @@ public class BigInt extends BigNumber {
 		}
 		return true;
 	}
-	
+
 	public boolean isPrimeEuler(BigInt[] bases) {
 		for (BigInt base : bases) {
 			boolean isPrimeEuler = this.isPrimeEuler(base);
@@ -455,19 +455,69 @@ public class BigInt extends BigNumber {
 	}
 
 	public boolean isPrimeEuler(BigInt base) {
+		BigInt baseClone = base.clone();
 		BigInt one = new BigInt(true, 1, this.size);
 		BigInt exponent = this.clone();
 		exponent.sub(one, positive);
 		exponent.shiftRight(1);
-		base.powMod(exponent, this);
+		baseClone.powMod(exponent, this);
 		// the value should equal +-1 -> drop the sign!
-		base.positive = true;
-		if (base.equals(one)) {
+		baseClone.positive = true;
+		if (baseClone.equals(one)) {
 			return true;
 		}
-		BigInt result = BigIntUtils.sub(base, this);
+		BigInt result = BigIntUtils.sub(baseClone, this);
 		result.positive = true;
 		return result.equals(one);
+	}
+
+	public boolean isPrimeMillerRabin(BigInt base) {
+		BigInt one = new BigInt(true, 1, this.size);
+		BigInt exponent = this.clone();
+		exponent.sub(one, positive);
+		exponent.shiftRight(1);
+		int exponentSquareCount = 0;
+		// exponent = (n-1)/2 --> keep halving it until it is uneven to find the
+		// smallest exponent
+		while (exponent.isEven() && exponent.spart > 0) {
+			exponent.shiftRight(1);
+			++exponentSquareCount;
+		}
+		boolean isFirstNumber = true;
+		for (int i = 0; i <= exponentSquareCount; i++) {
+			BigInt baseClone = base.clone();
+			baseClone.powMod(exponent, this);
+			if (isFirstNumber) {
+				// if the first exponent is tested return true if a^d = +-1.
+				baseClone.positive = true;
+				if (baseClone.equals(one)) {
+					return true;
+				}
+				BigInt result = BigIntUtils.sub(baseClone, this);
+				result.positive = true;
+				if (result.equals(one)) {
+					return true;
+				}
+			} else {
+				// return true if the non-first exponent equals -1.
+				if (!baseClone.positive) {
+					baseClone.positive = true;
+					if (baseClone.equals(one)) {
+						return true;
+					}
+				}
+				BigInt result = BigIntUtils.sub(baseClone, this);
+				if (!result.positive) {
+					result.positive = true;
+					if (result.equals(one)) {
+						return true;
+					}
+				}
+			}
+			exponent.square();
+			isFirstNumber = false;
+		}
+		return false;
 	}
 
 	public void div10() {
