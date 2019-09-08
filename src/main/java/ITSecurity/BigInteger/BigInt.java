@@ -300,27 +300,28 @@ public class BigInt extends BigNumber {
 	 */
 	public void powMod(BigInt n, BigInt m) {
 		BigInt zero = new BigInt(true, 0, this.size);
-		if (n.compareTo(zero) < 0) {
+		BigInt nClone = n.clone();
+		if (nClone.compareTo(zero) < 0) {
 			throw new RuntimeException("The exponent must be >= 0.");
 		}
-		if (n.compareTo(zero) == 0) {
+		if (nClone.compareTo(zero) == 0) {
 			this.positive = true;
 			this.clearCells();
 			this.cells[0].value = 1;
 			return;
 		}
 		BigInt one = new BigInt(true, 1, this.size);
-		if (n.compareTo(one) == 0) {
+		if (nClone.compareTo(one) == 0) {
 			return;
 		}
 
-		boolean sign = this.positive || n.isEven();
+		boolean sign = this.positive || nClone.isEven();
 		BigInt t = this.clone();
 
 		BigInt result = new BigInt(sign, 1, DEFAULT_BIG_INT_SIZE);
-		while (n.compareTo(zero) > 0) {
-			boolean isBitOne = !n.isEven();
-			n.shiftRight(1);
+		while (nClone.compareTo(zero) > 0) {
+			boolean isBitOne = !nClone.isEven();
+			nClone.shiftRight(1);
 			if (isBitOne) {
 				result.mul(t, true);
 				result = result.divMod(m, true);
@@ -424,6 +425,26 @@ public class BigInt extends BigNumber {
 		this.positive = true;
 		this.reduce();
 	}
+	
+	public boolean isPrimeFermat(BigInt[] bases) {
+		for (BigInt base : bases) {
+			boolean isPrimeFermat = this.isPrimeFermat(base);
+			if (!isPrimeFermat) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean isPrimeEuler(BigInt[] bases) {
+		for (BigInt base : bases) {
+			boolean isPrimeEuler = this.isPrimeEuler(base);
+			if (!isPrimeEuler) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 	public boolean isPrimeFermat(BigInt base) {
 		BigInt baseClone = base.clone();
@@ -435,7 +456,6 @@ public class BigInt extends BigNumber {
 
 	public boolean isPrimeEuler(BigInt base) {
 		BigInt one = new BigInt(true, 1, this.size);
-//		base = base.divMod(this, true);
 		BigInt exponent = this.clone();
 		exponent.sub(one, positive);
 		exponent.shiftRight(1);

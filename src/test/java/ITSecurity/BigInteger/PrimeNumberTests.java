@@ -59,58 +59,63 @@ public class PrimeNumberTests {
 		this.isPrimeEuler = isPrimeEuler;
 	}
 
-	private void testPrimeFermat(BigInt base, BigInt prime, boolean expected) {
-		boolean result = prime.isPrimeFermat(base);
+	private void testPrimeFermat(BigInt[] bases, BigInt prime, boolean expected) {
+		boolean result = prime.isPrimeFermat(bases);
 		assertEquals(expected, result);
 	}
 
-	private void testPrimeEuler(BigInt base, BigInt prime, boolean expected) {
-		boolean result = prime.isPrimeEuler(base);
+	private void testPrimeEuler(BigInt[] bases, BigInt prime, boolean expected) {
+		boolean result = prime.isPrimeEuler(bases);
 		assertEquals(expected, result);
 	}
 
-//	@Test
-//	public void fermatHex() {
-//		BigInt base = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
-//		BigInt prime = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
-//		for (String baseHex : this.baseHex) {
-//			base.fromHexString(baseHex);
-//			prime.fromHexString(this.primeHex);
-//			this.testPrimeFermat(base, prime, this.isPrimeFermat);
-//		}
-//	}
+	@Test
+	public void fermatHex() {
+		BigInt prime = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
+		prime.fromHexString(this.primeHex);
+		BigInt[] bases = new BigInt[this.baseHex.length];
+		for (int i = 0; i < bases.length; i++) {
+			bases[i] = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
+			bases[i].fromHexString(this.baseHex[i]);
+		}
+		this.testPrimeFermat(bases, prime, this.isPrimeFermat);
+	}
 
 	@Test
 	public void fermatDec() {
-		BigInt base = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
 		BigInt prime = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
-		for (String baseDec : this.baseDec) {
-			base.fromDecString(baseDec);
-			prime.fromDecString(this.primeDec);
-			this.testPrimeFermat(base, prime, this.isPrimeFermat);
+		prime.fromDecString(this.primeDec);
+		BigInt[] bases = new BigInt[this.baseDec.length];
+		for (int i = 0; i < bases.length; i++) {
+			bases[i] = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
+			bases[i].fromDecString(this.baseDec[i]);
 		}
+		this.testPrimeFermat(bases, prime, this.isPrimeFermat);
 	}
 
-//	@Test
-//	public void eulerHex() {
-//		BigInt base = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
-//		BigInt prime = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
-//		for (String baseHex : this.baseHex) {
-//			base.fromHexString(baseHex);
-//			prime.fromHexString(this.primeHex);
-//			this.testPrimeEuler(base, prime, this.isPrimeEuler);
-//		}
-//	}
+	@Test
+	public void eulerHex() {
+		BigInt prime = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
+		prime.fromHexString(this.primeHex);
+		BigInt[] bases = new BigInt[this.baseHex.length];
+		for (int i = 0; i < bases.length; i++) {
+			bases[i] = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
+			bases[i].fromHexString(this.baseHex[i]);
+		}
+		this.testPrimeEuler(bases, prime, this.isPrimeEuler);
+	}
 
 	@Test
 	public void eulerDec() {
-		BigInt base = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
 		BigInt prime = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
-		for (String baseDec : this.baseDec) {
-			base.fromDecString(baseDec);
-			prime.fromDecString(this.primeDec);
-			this.testPrimeEuler(base, prime, this.isPrimeEuler);
+		prime.fromDecString(this.primeDec);
+		BigInt[] bases = new BigInt[this.baseDec.length];
+		for (int i = 0; i < bases.length; i++) {
+			bases[i] = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
+			bases[i].fromDecString(this.baseDec[i]);
 		}
+		this.testPrimeEuler(bases, prime, this.isPrimeEuler);
 	}
+
 
 }
