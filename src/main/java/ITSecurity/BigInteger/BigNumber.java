@@ -1,8 +1,8 @@
 package ITSecurity.BigInteger;
 
 public abstract class BigNumber implements Comparable<BigNumber> {
+	public int spart;
 	protected int size;
-	protected int spart;
 	protected boolean positive;
 	protected Cell2[] cells;
 

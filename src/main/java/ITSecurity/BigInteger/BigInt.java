@@ -567,7 +567,7 @@ public class BigInt extends BigNumber {
 	}
 
 	@Override
-	protected BigInt clone() {
+	public BigInt clone() {
 		return new BigInt(this, this.size);
 	}
 
