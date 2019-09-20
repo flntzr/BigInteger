@@ -1,5 +1,7 @@
 package ITSecurity.BigInteger;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public final class BigIntUtils {
 	public static BigInt add(BigInt a, BigInt b) {
 		BigInt c;
@@ -97,5 +99,56 @@ public final class BigIntUtils {
 			return new Cell(0);
 		}
 		return new Cell(Integer.divideUnsigned(dividend.value, divisor.value));
+	}
+
+	/**
+	 * Returns a pseudo-random BigInt with the given size. The bit at the
+	 * size-position will be 1. Uses a linear congruential generator.
+	 * 
+	 * @param size The size. Must be >0.
+	 * @return
+	 */
+	public static BigInt getRandomOdd(int size) {
+		if (size <= 0) {
+			throw new RuntimeException("RandomOdd size must be >0.");
+		}
+		int maxNum = Integer.MAX_VALUE;
+		int m = ThreadLocalRandom.current().nextInt(0, maxNum);
+		int y = ThreadLocalRandom.current().nextInt(0, maxNum);
+		int a = ThreadLocalRandom.current().nextInt(0, m);
+		int b = ThreadLocalRandom.current().nextInt(0, m);
+
+		BigInt result = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
+		for (int i = 0; i < size; i++) {
+			y = getPsudoRandomInt(a, b, m, y);
+			byte randomBit = (byte)(y & 1); // 0x00 or 0x01
+			int cellBit = i % Cell.CELL_BASE;
+			int cellIndex = i / Cell.CELL_BASE;
+			result.cells[cellIndex].value |= (randomBit << cellBit);
+		}
+		result.spart = size;
+		
+		result.cells[0].value |= 1; // make odd
+		
+		int msbBit = size % Cell.CELL_BASE;
+		int msbIndex = size / Cell.CELL_BASE;
+		result.cells[msbIndex].value |= (1 << msbBit); // set most significant bit to 1
+		
+		return result;
+	}
+
+	/**
+	 * yNew = (a * yPrev + b) MOD m
+	 * 
+	 * Only use the last bit of the return value for "true pseudorandomness" ;)
+	 * 
+	 * @param a
+	 * @param b
+	 * @param m
+	 * @param yPrev
+	 * @return
+	 */
+	private static int getPsudoRandomInt(int a, int b, int m, int yPrev) {
+		return (a * yPrev + b) % m;
 	}
 }
