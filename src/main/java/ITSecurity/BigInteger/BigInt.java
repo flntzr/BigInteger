@@ -516,7 +516,7 @@ public class BigInt extends BigNumber {
 					}
 				}
 			}
-			exponent.square();
+			exponent.shiftLeft(1);
 			isFirstNumber = false;
 		}
 		return false;
