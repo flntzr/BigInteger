@@ -311,9 +311,9 @@ public class BigInt extends BigNumber {
 			return;
 		}
 		BigInt one = new BigInt(true, 1, this.size);
-		if (nClone.compareTo(one) == 0) {
-			return;
-		}
+//		if (nClone.compareTo(one) == 0) {
+//			return;
+//		}
 
 		boolean sign = this.positive || nClone.isEven();
 		BigInt t = this.clone();
@@ -447,11 +447,12 @@ public class BigInt extends BigNumber {
 	}
 
 	public boolean isPrimeFermat(BigInt base) {
-		BigInt baseClone = base.clone();
-		baseClone = baseClone.divMod(this, true);
+		BigInt rightSide = base.clone();
+		rightSide = rightSide.divMod(this, true);
 		BigInt thisClone = this.clone();
-		base.powMod(this, thisClone);
-		return base.equals(baseClone);
+		BigInt leftSide = base.clone();
+		leftSide.powMod(this, thisClone);
+		return leftSide.equals(rightSide);
 	}
 
 	public boolean isPrimeEuler(BigInt base) {
@@ -476,6 +477,7 @@ public class BigInt extends BigNumber {
 		BigInt exponent = this.clone();
 		exponent.sub(one, positive);
 		exponent.shiftRight(1);
+		exponent.reduce();
 		int exponentSquareCount = 0;
 		// exponent = (n-1)/2 --> keep halving it until it is uneven to find the
 		// smallest exponent
