@@ -446,6 +446,26 @@ public class BigInt extends BigNumber {
 		return true;
 	}
 
+	public boolean isPrimeMillerRabin(int[] bases) {
+		for (int base : bases) {
+			boolean isPrimeMR = this.isPrimeMillerRabin(new BigInt(base >= 0, base, DEFAULT_BIG_INT_SIZE));
+			if (!isPrimeMR) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public boolean isPrimeMillerRabin(BigInt[] bases) {
+		for (BigInt base : bases) {
+			boolean isPrimeMR = this.isPrimeMillerRabin(base);
+			if (!isPrimeMR) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public boolean isPrimeFermat(BigInt base) {
 		BigInt rightSide = base.clone();
 		rightSide = rightSide.divMod(this, true);
