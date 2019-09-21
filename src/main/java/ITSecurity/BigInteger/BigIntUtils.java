@@ -126,7 +126,7 @@ public final class BigIntUtils {
 			int cellIndex = i / Cell.CELL_BASE;
 			result.cells[cellIndex].value |= (randomBit << cellBit);
 		}
-		result.spart = size;
+		result.spart = Math.max(1, size / Cell.CELL_BASE);
 		
 		result.cells[0].value |= 1; // make odd
 		
