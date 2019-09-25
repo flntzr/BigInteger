@@ -64,6 +64,7 @@ public final class BigIntUtils {
 		if (c.spart == 0) {
 			c.positive = true;
 		}
+		c.reduce();
 		return c;
 	}
 	
@@ -81,8 +82,8 @@ public final class BigIntUtils {
 		if (a.spart == 0) {
 			return new BigInt[] {
 					b.clone(),
-					new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE),
-					new BigInt(true, 1, BigInt.DEFAULT_BIG_INT_SIZE),
+					new BigInt(true, 0, a.size),
+					new BigInt(true, 1, a.size),
 			};
 		} else {
 			BigInt[] result = egcd(divMod(b.clone(), a), a);
