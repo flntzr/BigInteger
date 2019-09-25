@@ -58,7 +58,7 @@ public class RsaHandler {
 
 	public static KeyPair generateRsaKeys(BigInt p, BigInt q, BigInt e) {
 		BigInt one = new BigInt(true, 1, BigInt.DEFAULT_BIG_INT_SIZE);
-		
+
 		// phiN = (p-1)*(q-1)
 		BigInt phiN = p.clone();
 		phiN.sub(one, true);
@@ -82,5 +82,27 @@ public class RsaHandler {
 		result.setE(e);
 		result.setD(d);
 		return result;
+	}
+
+	/**
+	 * Encrypts the plaintext. Returns the encrypted text.
+	 * 
+	 * @param plainText
+	 * @param e
+	 * @param n
+	 * @return
+	 */
+	public static BigInt encrypt(BigInt e, BigInt n, BigInt plainText) {
+		// Cipher = m^e mod n
+		BigInt m = plainText.clone();
+		m.powMod(e, n);
+		return m;
+	}
+	
+	public static BigInt decrypt(BigInt d, BigInt n, BigInt cipherText) {
+		// Plain = c^d mod n
+		BigInt c = cipherText.clone();
+		c.powMod(d, n);
+		return c;
 	}
 }
