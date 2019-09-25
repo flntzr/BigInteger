@@ -67,6 +67,16 @@ public final class BigIntUtils {
 		return c;
 	}
 	
+	/**
+	 * Returns an array. First element is the GCD, second and third elements are the factors u und a such that
+	 * 
+	 * gcd(a,b) = a*u + b*v
+	 * 
+	 * If a and b are coprime (gcd(a,b) = 1), then x is the inverse of a and y is the inverse of b. 
+	 * @param a
+	 * @param b
+	 * @return
+	 */
 	public static BigInt[] egcd(BigInt a, BigInt b) {
 		if (a.spart == 0) {
 			return new BigInt[] {
@@ -87,6 +97,22 @@ public final class BigIntUtils {
 				sub(y, bClone),
 				x.clone()
 			};
+		}
+	}
+	
+	/**
+	 * Returns the multiplicative inverse of 'a' such that a*a_inverse mod m = 1 mod m.
+	 * @param a
+	 * @param m
+	 * @return
+	 */
+	public static BigInt inverse(BigInt a, BigInt m) {
+		BigInt[] result = egcd(a, m);
+		BigInt inverse = result[1];
+		if (inverse.positive) {			
+			return inverse;
+		} else {
+			return add(inverse, m);
 		}
 	}
 

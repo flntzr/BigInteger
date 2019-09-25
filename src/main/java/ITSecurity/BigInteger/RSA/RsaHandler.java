@@ -41,30 +41,46 @@ public class RsaHandler {
 			throw new RuntimeException("Key size must be >" + (MIN_KEY_LENGTH_BITS + KEY_SIZE_DELTA) + " bits long.");
 		}
 		int base = ThreadLocalRandom.current().nextInt(MIN_KEY_LENGTH_BITS + KEY_SIZE_DELTA, keySize - KEY_SIZE_DELTA);
-		boolean success = false;
-		BigInt one = new BigInt(true, 1, BigInt.DEFAULT_BIG_INT_SIZE);
-		while (!success) {
-			BigInt p = generatePrime( base, KEY_SIZE_DELTA);
+		while (true) {
+			BigInt p = generatePrime(base, KEY_SIZE_DELTA);
 			BigInt q = generatePrime(base, KEY_SIZE_DELTA);
 			while (p.equals(q)) {
 				// ensure p != q
 				q = generatePrime(base, KEY_SIZE_DELTA);
 			}
 			BigInt e = generateE();
-			
-			// phiN = (p-1)*(q-1)
-			BigInt phiN = p.clone();
-			phiN.sub(one, true);
-			BigInt qClone = q.clone();
-			qClone.sub(one, true);
-			phiN.mul(qClone, true);
-			
-			BigInt gcd = e.clone();
-			gcd.binGcd(phiN);
-			if (gcd.equals(one)) {
-				success = true;
+			KeyPair keyPair = generateRsaKeys(p, q, e);
+			if (keyPair != null) {
+				return keyPair;
 			}
 		}
-		return null;
+	}
+
+	public static KeyPair generateRsaKeys(BigInt p, BigInt q, BigInt e) {
+		BigInt one = new BigInt(true, 1, BigInt.DEFAULT_BIG_INT_SIZE);
+		
+		// phiN = (p-1)*(q-1)
+		BigInt phiN = p.clone();
+		phiN.sub(one, true);
+		BigInt qClone = q.clone();
+		qClone.sub(one, true);
+		phiN.mul(qClone, true);
+
+		BigInt gcd = e.clone();
+		gcd.binGcd(phiN);
+		if (!gcd.equals(one)) {
+			return null;
+		}
+
+		BigInt d = BigIntUtils.inverse(e, phiN);
+		BigInt n = p.clone();
+		n.mul(q, true);
+		KeyPair result = new KeyPair();
+		result.setP(p);
+		result.setQ(q);
+		result.setN(n);
+		result.setE(e);
+		result.setD(d);
+		return result;
 	}
 }
