@@ -66,6 +66,29 @@ public final class BigIntUtils {
 		}
 		return c;
 	}
+	
+	public static BigInt[] egcd(BigInt a, BigInt b) {
+		if (a.spart == 0) {
+			return new BigInt[] {
+					b.clone(),
+					new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE),
+					new BigInt(true, 1, BigInt.DEFAULT_BIG_INT_SIZE),
+			};
+		} else {
+			BigInt[] result = egcd(divMod(b.clone(), a), a);
+			BigInt gcd = result[0];
+			BigInt x = result[1];
+			BigInt y = result[2];
+			BigInt bClone = b.clone();
+			div(bClone,a);
+			bClone.mul(x, bClone.positive == x.positive);
+			return new BigInt[] {
+				gcd.clone(),
+				sub(y, bClone),
+				x.clone()
+			};
+		}
+	}
 
 	/**
 	 * Divides a by b. Modifies a and returns the remainder. The remainder is
