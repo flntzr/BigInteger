@@ -49,7 +49,7 @@ public class RsaTests1 {
 	}
 
 	@Test
-	public void testDecGcd() {
+	public void testRsaKeyGeneration() {
 		BigInt p = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
 		p.fromDecString(this.decVals[0]);
 		BigInt q = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
