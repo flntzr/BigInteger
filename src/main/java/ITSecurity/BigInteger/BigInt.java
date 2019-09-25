@@ -396,13 +396,78 @@ public class BigInt extends BigNumber {
 			bClone.reduce();
 		}
 
-		for (; k > 0; k--) {
-			bClone.shiftLeft(1);
-		}
+		bClone.shiftLeft(k);
 		this.cells = bClone.cells;
 		this.positive = true;
 		this.size = bClone.size;
 		this.spart = bClone.spart;
+	}
+
+	/**
+	 * The extended binary euclid algorithm. Modifies 'this' to be the gcd.
+	 * 
+	 * @param b The other BigInt.
+	 * @return The linear factors [bu, bv].
+	 */
+	public BigInt[] egcdBin(BigInt b) {
+		if (!this.positive || !b.positive) {
+			throw new RuntimeException("Cannot run the extended euclid on negative numbers.");
+		}
+		BigInt a = this.clone();
+		BigInt bClone = b.clone();
+		int k = 0;
+		for (k = 0; a.isEven() && bClone.isEven(); k++) {
+			a.shiftRight(1);
+			bClone.shiftRight(1);
+		}
+		BigInt zero = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
+		BigInt au = new BigInt(true, 1, BigInt.DEFAULT_BIG_INT_SIZE);
+		BigInt av = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
+		BigInt bu = new BigInt(true, 0, BigInt.DEFAULT_BIG_INT_SIZE);
+		BigInt bv = new BigInt(true, 1, BigInt.DEFAULT_BIG_INT_SIZE);
+		BigInt x = a.clone();
+		BigInt y = bClone.clone();
+		while (!x.equals(zero)) {
+			while (x.isEven()) {
+				x.shiftRight(1);
+				if (x.isEven() && y.isEven()) {
+					au.shiftRight(1);
+					av.shiftRight(1);
+				} else {
+					au = BigIntUtils.add(au, bClone);
+					au.shiftRight(1);
+					av = BigIntUtils.sub(av, a);
+					av.shiftRight(1);
+				}
+			}
+			while (y.isEven()) {
+				y.shiftRight(1);
+				if (x.isEven() && y.isEven()) {
+					bu.shiftRight(1);
+					bv.shiftRight(1);
+				} else {
+					bu = BigIntUtils.add(bu, a);
+					bu.shiftRight(1);
+					bv = BigIntUtils.sub(bv, bClone);
+					bv.shiftRight(1);
+				}
+			}
+			if (x.compareTo(y) < 0) {
+				y = BigIntUtils.sub(y, x);
+				bu = BigIntUtils.sub(bu, au);
+				bv = BigIntUtils.sub(bv, av);
+			} else {
+				x = BigIntUtils.sub(x, y);
+				au = BigIntUtils.sub(au, bu);
+				av = BigIntUtils.sub(av, bv);
+			}
+		}
+		y.shiftLeft(k);
+		y.reduce();
+		this.cells = y.cells;
+		this.spart = y.spart;
+		this.size = y.size;
+		return new BigInt[] { bu, bv };
 	}
 
 	public boolean isEven() {
